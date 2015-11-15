@@ -5,11 +5,17 @@ It allows to generate automated text from a template and some data (tags).
 # Tags
 
 The tags that appears in the template are replaced by the matching values. Example :
-Data : 
+
+Data :
+
     ['%my_tag%' => 'dolor']
-Template : 
+
+Template :
+
     Lorem %my_tag% ipsum
-Result : 
+
+Result :
+
     Lorem dolor ipsum
 
 # Core functions :
@@ -19,9 +25,11 @@ Result :
 Returns randomly one of the arguments
 
 Template example :
+
     #randon{one|two|three}
 
 Result example :
+
     two
 
 ## 'shuffle'
@@ -29,9 +37,11 @@ Result example :
 Returns the arguments shuffled. The first arguments is the separator between each others.
 
 Template example :
+
     #shuffle{ |one|two|three}
 
 Result example :
+
     two three one
 
 ## 'if'
@@ -39,6 +49,7 @@ Result example :
 Handle condition. The first parameter is the condition (allowed tokens : and, or, <, >, <=, >=, <>, =). The second parameter is the "then statement". The third optional parameter is the "else statement".
 
 Template example :
+
     #if{%val% = 5|the value equals 5}
     #if{%val% = 5|the value equals 5|the value doesn't equal 5}
     #if{%val% < 5 or %val% > 15|the value is lower that 5 or greater that 15|the value is between 5 and 15}
