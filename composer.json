@@ -1,0 +1,15 @@
+{
+    "name": "neveldo/spin-generator",
+    "description" : "Spin Generator Proof-Of-Concept.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "autoload": {
+        "psr-4" : {
+            "Neveldo\\TextGenerator\\": "src/TextGenerator/"
+        }
+    },
+    "minimum-stability" : "stable"
+}
