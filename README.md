@@ -4,10 +4,13 @@ It allows to generate automated text from a template and some data (tags).
 
 # Tags
 
-DThe tags that appears in the template are replaced by the matching values. Example :
-Data : ['%my_tag%' => 'dolor']
-Template : Lorem %my_tag% ipsum
-Result : Lorem dolor ipsum
+The tags that appears in the template are replaced by the matching values. Example :
+Data : 
+    ['%my_tag%' => 'dolor']
+Template : 
+    Lorem %my_tag% ipsum
+Result : 
+    Lorem dolor ipsum
 
 # Core functions :
 
