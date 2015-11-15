@@ -17,7 +17,11 @@ class TagReplacer implements TagReplacerInterface
      */
     public function setTags(array $tags)
     {
-        $this->tags = $tags;
+        $pairs = [];
+        foreach($tags as $tagName => $value) {
+            $pairs['[' . $tagName . ']'] = $value;
+        }
+        $this->tags = $pairs;
     }
 
     /**

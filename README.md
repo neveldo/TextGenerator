@@ -8,7 +8,7 @@ The tags that appears in the template are replaced by the matching values. Examp
 
 Data :
 
-    ['[my_tag]' => 'dolor']
+    ['my_tag' => 'dolor']
 
 Template :
 
