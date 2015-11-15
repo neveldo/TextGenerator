@@ -8,11 +8,11 @@ The tags that appears in the template are replaced by the matching values. Examp
 
 Data :
 
-    ['%my_tag%' => 'dolor']
+    ['[my_tag]' => 'dolor']
 
 Template :
 
-    Lorem %my_tag% ipsum
+    Lorem [my_tag] ipsum
 
 Result :
 
@@ -50,14 +50,14 @@ Handle condition. The first parameter is the condition (allowed tokens : and, or
 
 Template example :
 
-    #if{%val% = 5|the value equals 5}
-    #if{%val% = 5|the value equals 5|the value doesn't equal 5}
-    #if{%val% < 5 or %val% > 15|the value is lower that 5 or greater that 15|the value is between 5 and 15}
-    #if{%val% > 5 and %val% < 15 or %val2% > 10 and %val2% < 30|then statement ...|else statement ...}
+    #if{[val] = 5|the value equals 5}
+    #if{[val] = 5|the value equals 5|the value doesn't equal 5}
+    #if{[val] < 5 or [val] > 15|the value is lower that 5 or greater that 15|the value is between 5 and 15}
+    #if{[val] > 5 and [val] < 15 or[val] > 10 and [val] < 30|then statement ...|else statement ...}
 
 ## Complete template example :
 
-    #if{%sex% = m|#shuffle{ |%name% est un #random{acteur|comédien|artiste} #if{%age% <= 30|débutant|confirmé} #random{de|agé de|qui a} %age% ans.|%name% #random{est né|a vu le jour} le %birthdate% #random{dans la ville de|à} %birthplace%.}|#shuffle{ |%name% est une #random{actrice|comédienne|artiste} #if{%age% <= 30|débutante|confirmée} #random{de|agé de|qui a} %age% ans.|%name% #random{est née|a vu le jour} le %birthdate% #random{dans la ville de|à} %birthplace%.}}
+    #if{[sex] = m|#shuffle{ |[name] est un #random{acteur|comédien|artiste} #if{[age] <= 30|débutant|confirmé} #random{de|agé de|qui a} [age] ans.|[name] #random{est né|a vu le jour} le [birthdate] #random{dans la ville de|à} [birthplace].}|#shuffle{ |[name] est une #random{actrice|comédienne|artiste} #if{[age] <= 30|débutante|confirmée} #random{de|agé de|qui a} [age] ans.|[name] #random{est née|a vu le jour} le [birthdate] #random{dans la ville de|à} [birthplace].}}
 
 Result :
 

@@ -13,7 +13,7 @@ class TagReplacer implements TagReplacerInterface
 
     /**
      * Initialize the tags list
-     * @param array $tags, format : ['tag_name' => 'value', ...]
+     * @param array $tags, format : ['[tag_name]' => 'value', ...]
      */
     public function setTags(array $tags)
     {

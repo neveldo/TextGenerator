@@ -9,10 +9,10 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
  * Parser for 'if' function: handle conditions a return the "then statement" or the "else statement"
  * depending on the condition evaluation
  * Examples :
- * #if{%val% = 5|then statement}
- * #if{%val% = 5|then statement|else statement}
- * #if{%val% < 5 or %val% > 15|then statement|else statement}
- * #if{%val% > 5 and %val% < 15 or %val2% > 10 and %val2% < 30|then statement|else statement
+ * #if{[val] = 5|then statement}
+ * #if{[val] = 5|then statement|else statement}
+ * #if{[val] < 5 or %val% > 15|then statement|else statement}
+ * #if{[val] > 5 and %val% < 15 or %val2% > 10 and %val2% < 30|then statement|else statement
  *
  * @package Neveldo\TextGenerator\Parser
  */
