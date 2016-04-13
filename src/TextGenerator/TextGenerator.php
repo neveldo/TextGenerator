@@ -168,8 +168,7 @@ class TextGenerator
     public function setTemplate($template)
     {
         if (substr_count($template, '{') !== substr_count($template, '}')) {
-            Throw new \RuntimeException("Template syntax error, please check functions brackets."
-            );
+            Throw new \RuntimeException("Template syntax error, please check functions brackets.");
         }
         $this->template = $template;
         return $this;
