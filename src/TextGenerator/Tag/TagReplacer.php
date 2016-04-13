@@ -3,25 +3,35 @@
 namespace Neveldo\TextGenerator\Tag;
 
 /**
- * Class TagReplacer
- * Replace tags wihin a string
+ * Class TagReplacerInterface
+ * Handle tags replacement within a text
  * @package Neveldo\TextGenerator\Tag
  */
 class TagReplacer implements TagReplacerInterface
 {
+    /**
+     * @var array tags, format : ['tag_name' => 'value', ...]
+     */
     private $tags;
 
     /**
+     * @var array escaped tags to use for text replacement
+     * format : ['@tag_name' => 'value', ...]
+     */
+    private $escapedTags;
+
+    /**
      * Initialize the tags list
-     * @param array $tags, format : ['[tag_name]' => 'value', ...]
+     * @param array $tags, format : ['tag_name' => 'value', ...]
      */
     public function setTags(array $tags)
     {
-        $pairs = [];
-        foreach($tags as $tagName => $value) {
-            $pairs['[' . $tagName . ']'] = $value;
+        $this->tags = $tags;
+
+        $this->escapedTags = [];
+        foreach($this->tags as $tag => $value) {
+            $this->escapedTags['@' . $tag] = $value;
         }
-        $this->tags = $pairs;
     }
 
     /**
@@ -31,6 +41,24 @@ class TagReplacer implements TagReplacerInterface
      */
     public function replace($content)
     {
-        return strtr($content, $this->tags);
+        return strtr($content, $this->escapedTags);
+    }
+
+    /**
+     * Return the array of available tags
+     * @return array
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Return the array of escaped tags
+     * @return array
+     */
+    public function getEscapedTags()
+    {
+        return $this->escapedTags;
     }
 }

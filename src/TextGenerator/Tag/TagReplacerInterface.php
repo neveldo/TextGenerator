@@ -4,13 +4,14 @@ namespace Neveldo\TextGenerator\Tag;
 
 /**
  * Interface TagReplacerInterface
+ * Handle tags replacement within a text
  * @package Neveldo\TextGenerator\Tag
  */
 interface TagReplacerInterface
 {
     /**
      * Initialize the tags list
-     * @param array $tags, format : ['[tag_name]' => 'value', ...]
+     * @param array $tags, format : ['tag_name' => 'value', ...]
      */
     public function setTags(array $tags);
 
@@ -20,4 +21,16 @@ interface TagReplacerInterface
      * @return string
      */
     public function replace($content);
+
+    /**
+     * Return the array of available tags
+     * @return array
+     */
+    public function getTags();
+
+    /**
+     * Return the array of escaped tags
+     * @return array
+     */
+    public function getEscapedTags();
 }
