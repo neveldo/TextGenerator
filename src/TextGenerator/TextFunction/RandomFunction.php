@@ -1,18 +1,18 @@
 <?php
 
-namespace Neveldo\TextGenerator\Parser;
+namespace Neveldo\TextGenerator\TextFunction;
 
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
 /**
- * Class RandomParser
+ * Class RandomFunction
  * Parser for 'random' function :  returns randomly one of the function arguments
  * Examples :
  * random{one|two|three}
  *
- * @package Neveldo\TextGenerator\Parser
+ * @package Neveldo\TextGenerator\TextFunction
  */
-class RandomParser implements ParserInterface
+class RandomFunction implements FunctionInterface
 {
     /**
      * @var TagReplacerInterface Tag Replacer service

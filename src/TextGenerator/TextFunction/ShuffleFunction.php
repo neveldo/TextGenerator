@@ -1,19 +1,19 @@
 <?php
 
-namespace Neveldo\TextGenerator\Parser;
+namespace Neveldo\TextGenerator\TextFunction;
 
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
 /**
- * Class ShuffleParser
+ * Class ShuffleFunction
  * Parser for 'shuffle' function :  returns the parameters shuffled.
  * The first parameter is the separator between each others.
  * Examples :
  * shuffle{ |one|two|three}
  *
- * @package Neveldo\TextGenerator\Parser
+ * @package Neveldo\TextGenerator\TextFunction
  */
-class ShuffleParser implements ParserInterface
+class ShuffleFunction implements FunctionInterface
 {
     /**
      * @var TagReplacerInterface Tag Replacer service

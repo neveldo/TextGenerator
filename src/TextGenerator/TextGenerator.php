@@ -2,10 +2,10 @@
 
 namespace Neveldo\TextGenerator;
 
-use Neveldo\TextGenerator\Parser\IfParser;
-use Neveldo\TextGenerator\Parser\ParserInterface;
-use Neveldo\TextGenerator\Parser\RandomParser;
-use Neveldo\TextGenerator\Parser\ShuffleParser;
+use Neveldo\TextGenerator\TextFunction\IfFunction;
+use Neveldo\TextGenerator\TextFunction\FunctionInterface;
+use Neveldo\TextGenerator\TextFunction\RandomFunction;
+use Neveldo\TextGenerator\TextFunction\ShuffleFunction;
 use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
@@ -17,9 +17,9 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 class TextGenerator
 {
     /**
-     * @var ParserInterface[] collection of function parsers
+     * @var FunctionInterface[] collection of function
      */
-    private $parsers = [];
+    private $functions = [];
 
     /**
      * @var TagReplacerInterface
@@ -43,11 +43,11 @@ class TextGenerator
         }
         $this->tagReplacer = $tr;
 
-        // Init core function parsers
+        // Init core text functions
         $this
-            ->registerParser('shuffle', new ShuffleParser($this->tagReplacer))
-            ->registerParser('random', new RandomParser($this->tagReplacer))
-            ->registerParser('if', new IfParser($this->tagReplacer))
+            ->registerFunction('shuffle', new ShuffleFunction($this->tagReplacer))
+            ->registerFunction('random', new RandomFunction($this->tagReplacer))
+            ->registerFunction('if', new IfFunction($this->tagReplacer))
         ;
     }
 
@@ -64,7 +64,11 @@ class TextGenerator
 
         $this->tagReplacer->setTags($data);
 
-        return $this->tagReplacer->replace($this->parse($this->template));
+        return trim(
+            $this->tagReplacer->replace(
+                $this->parse($this->template)
+            )
+        );
     }
 
     /**
@@ -108,36 +112,36 @@ class TextGenerator
                 }
             }
 
-            // Call the proper function parser
-            $input = $this->getParser($matches[1])->parse($arguments);
+            // Call the proper text function
+            $input = $this->getFunction($matches[1])->parse($arguments);
         }
         return preg_replace_callback('/([a-z_]+\{(?:[^\{\}]|(?R))+\})/s', [$this, 'parse'], $input);
     }
 
     /**
-     * Register a function parser
+     * Register a text function
      * @param $name function name to be used within the template
-     * @param ParserInterface $tp The function parser
+     * @param FunctionInterface $function The text function
      * @return $this
      */
-    public function registerParser($name, ParserInterface $tp)
+    public function registerFunction($name, FunctionInterface $function)
     {
-        $this->parsers[$name] = $tp;
+        $this->functions[$name] = $function;
         return $this;
     }
 
     /**
-     * Get a parser from its name
+     * Get a function from its name
      * @param $name
-     * @return ParserInterface
-     * @Thow \RuntimeException if the parser doesn't exist
+     * @return FunctionInterface
+     * @Thow \RuntimeException if the function doesn't exist
      */
-    public function getParser($name)
+    public function getFunction($name)
     {
-        if (!array_key_exists($name, $this->parsers)) {
-            Throw new \RuntimeException(sprintf("Error : parser '%s' doesn't exist.", $name));
+        if (!array_key_exists($name, $this->functions)) {
+            Throw new \RuntimeException(sprintf("Error : function '%s' doesn't exist.", $name));
         }
-        return $this->parsers[$name];
+        return $this->functions[$name];
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Neveldo\TextGenerator\Parser;
+namespace Neveldo\TextGenerator\TextFunction;
 
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -17,9 +17,9 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  *
  * More information about the syntax for the condition : http://symfony.com/doc/current/components/expression_language/syntax.html
  *
- * @package Neveldo\TextGenerator\Parser
+ * @package Neveldo\TextGenerator\TextFunction
  */
-class IfParser implements ParserInterface
+class IfFunction implements FunctionInterface
 {
     /**
      * @var TagReplacerInterface Tag Replacer service

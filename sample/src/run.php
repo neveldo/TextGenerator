@@ -15,7 +15,6 @@ shuffle{ |@name est une random{actrice|comédienne|artiste} if{(@age > 10 and ag
 }
 EOF;
 
-
 $data = [
     [
         'name' => 'Tom Cruise',

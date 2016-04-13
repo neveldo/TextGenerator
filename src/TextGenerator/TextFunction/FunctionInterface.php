@@ -1,13 +1,13 @@
 <?php
 
-namespace Neveldo\TextGenerator\Parser;
+namespace Neveldo\TextGenerator\TextFunction;
 
 /**
- * Interface ParserInterface
+ * Interface FunctionInterface
  * Interface for parsers
- * @package Neveldo\TextGenerator\Parser
+ * @package Neveldo\TextGenerator\TextFunction
  */
-interface ParserInterface
+interface FunctionInterface
 {
     /**
      * Execute the parser
