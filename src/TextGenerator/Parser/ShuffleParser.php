@@ -24,7 +24,7 @@ class ShuffleParser implements ParserInterface
      * IfParser constructor.
      * @param TagReplacerInterface $tr
      */
-    public function __construct($tr)
+    public function __construct(TagReplacerInterface $tr)
     {
         $this->tagReplacer = $tr;
     }
@@ -35,7 +35,6 @@ class ShuffleParser implements ParserInterface
      */
     public function parse(array $arguments)
     {
-
         if (count($arguments) < 2) {
             Throw new \RuntimeException(
                 sprintf("ShuffleParser expect at least two parameters, %d given.", count($arguments))
