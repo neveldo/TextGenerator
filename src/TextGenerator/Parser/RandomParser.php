@@ -23,7 +23,7 @@ class RandomParser implements ParserInterface
      * IfParser constructor.
      * @param TagReplacerInterface $tr
      */
-    public function __construct($tr)
+    public function __construct(TagReplacerInterface $tr)
     {
         $this->tagReplacer = $tr;
     }
