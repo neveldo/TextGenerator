@@ -17,7 +17,7 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 class TextGenerator
 {
     /**
-     * @var array collection of function parsers
+     * @var ParserInterface[] collection of function parsers
      */
     private $parsers = [];
 
