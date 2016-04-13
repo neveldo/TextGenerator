@@ -9,9 +9,9 @@ require __DIR__ . '/../../vendor/autoload.php';
 use Neveldo\TextGenerator\TextGenerator;
 
 $template = <<<EOF
-#if{[sex] = m|
-#shuffle{ |[name] est un #random{acteur|comédien|artiste} #if{[age] <= 30|débutant|confirmé} #random{de|agé de|qui a} [age] ans.|[name] #random{est né|a vu le jour} le [birthdate] #random{dans la ville de|à} [birthplace].}|
-#shuffle{ |[name] est une #random{actrice|comédienne|artiste} #if{[age] <= 30|débutante|confirmée} #random{de|agé de|qui a} [age] ans.|[name] #random{est née|a vu le jour} le [birthdate] #random{dans la ville de|à} [birthplace].}
+if{@sex == 'm'|
+shuffle{ |@name est un random{acteur|comédien|artiste} if{@age <= 30|débutant|confirmé} random{de|agé de|qui a} @age ans.|@name random{est né|a vu le jour} le @birthdate random{dans la ville de|à} @birthplace.}|
+shuffle{ |@name est une random{actrice|comédienne|artiste} if{(@age > 10 and age <= 25) or @age == 26|débutante|confirmée} random{de|agé de|qui a} @age ans.|@name random{est née|a vu le jour} le @birthdate random{dans la ville de|à} @birthplace.}
 }
 EOF;
 
