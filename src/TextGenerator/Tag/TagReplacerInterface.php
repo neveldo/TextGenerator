@@ -4,7 +4,7 @@ namespace Neveldo\TextGenerator\Tag;
 
 /**
  * Interface TagReplacerInterface
- * Handle tags replacement within a text
+ * Interface for services that handle tags replacement within a text
  * @package Neveldo\TextGenerator\Tag
  */
 interface TagReplacerInterface

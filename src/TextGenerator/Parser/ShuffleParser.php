@@ -9,19 +9,19 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
  * Parser for 'shuffle' function :  returns the parameters shuffled.
  * The first parameter is the separator between each others.
  * Examples :
- * #shuffle{ |one|two|three}
+ * shuffle{ |one|two|three}
  *
  * @package Neveldo\TextGenerator\Parser
  */
 class ShuffleParser implements ParserInterface
 {
     /**
-     * @var TagReplacerInterface
+     * @var TagReplacerInterface Tag Replacer service
      */
     private $tagReplacer;
 
     /**
-     * IfParser constructor.
+     * ShuffleParser constructors
      * @param TagReplacerInterface $tr
      */
     public function __construct(TagReplacerInterface $tr)
@@ -30,6 +30,7 @@ class ShuffleParser implements ParserInterface
     }
 
     /**
+     * Handle Shuffle function
      * @param array $arguments
      * @return string
      */

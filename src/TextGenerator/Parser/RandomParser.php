@@ -6,21 +6,21 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
 /**
  * Class RandomParser
- * Parser for 'random' function :  returns randomly one of the arguments
+ * Parser for 'random' function :  returns randomly one of the function arguments
  * Examples :
- * #randon{one|two|three}
+ * random{one|two|three}
  *
  * @package Neveldo\TextGenerator\Parser
  */
 class RandomParser implements ParserInterface
 {
     /**
-     * @var TagReplacerInterface
+     * @var TagReplacerInterface Tag Replacer service
      */
     private $tagReplacer;
 
     /**
-     * IfParser constructor.
+     * RandomParser constructor.
      * @param TagReplacerInterface $tr
      */
     public function __construct(TagReplacerInterface $tr)
@@ -29,6 +29,7 @@ class RandomParser implements ParserInterface
     }
 
     /**
+     * Handle Random function
      * @param array $arguments
      * @return string
      */

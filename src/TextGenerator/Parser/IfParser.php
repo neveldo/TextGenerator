@@ -8,19 +8,21 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 /**
  * Class IfParser
  * Parser for 'if' function: handle conditions a return the "then statement" or the "else statement"
- * depending on the condition evaluation
+ * Depending on the condition evaluation
  * Examples :
  * if{@val = 5|then statement}
  * if{@val = 5|then statement|else statement}
  * if{@val < 5 or %val% > 15|then statement|else statement}
- * if{@val > 5 and val < 15|then statement|else statement
+ * if{@val > 5 and val < 15|then statement|else statement}
+ *
+ * More information about the syntax for the condition : http://symfony.com/doc/current/components/expression_language/syntax.html
  *
  * @package Neveldo\TextGenerator\Parser
  */
 class IfParser implements ParserInterface
 {
     /**
-     * @var TagReplacerInterface
+     * @var TagReplacerInterface Tag Replacer service
      */
     private $tagReplacer;
 
@@ -34,6 +36,7 @@ class IfParser implements ParserInterface
     }
 
     /**
+     * Handle If function
      * @param array $arguments
      * @return string
      */
