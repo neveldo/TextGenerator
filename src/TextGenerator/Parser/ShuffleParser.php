@@ -36,7 +36,7 @@ class ShuffleParser implements ParserInterface
     public function parse(array $arguments)
     {
         if (count($arguments) < 2) {
-            Throw new \RuntimeException(
+            Throw new \InvalidArgumentException(
                 sprintf("ShuffleParser expect at least two parameters, %d given.", count($arguments))
             );
         }
