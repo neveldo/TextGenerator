@@ -1,8 +1,10 @@
+# TextGenerator
+
 TextGenerator is a tool that aims to automate the generation of text from data by using a template. 
 In the template, you can use tags and call functions.
 Feel free to comment and contribute.
 
-# Tags
+## Tags
 
 The tags that appears in the template are replaced by the matching values. Example :
 
@@ -18,9 +20,9 @@ Output :
 
     Lorem dolor ipsum
 
-# Core functions :
+## Core functions :
 
-## 'random'
+### 'random'
 
 Returns randomly one of the arguments
 
@@ -32,7 +34,7 @@ Output example :
 
     two
 
-## 'shuffle'
+### 'shuffle'
 
 Returns the arguments shuffled. The first argument is the separator between each others.
 
@@ -44,7 +46,7 @@ Output example :
 
     two three one
 
-## 'if'
+### 'if'
 
 Handle conditions. The first parameter is the condition to check for. The second parameter is returned if the condition is true. The third optional parameter is returned if the condition is false.
 Read more about the syntax for the conditions on the [Symfony website](http://symfony.com/doc/current/components/expression_language/syntax.html).
