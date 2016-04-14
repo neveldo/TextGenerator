@@ -9,7 +9,7 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
  * Parser for 'shuffle' function :  returns the parameters shuffled.
  * The first parameter is the separator between each others.
  * Examples :
- * shuffle{ |one|two|three}
+ * #shuffle{ |one|two|three}
  *
  * @package Neveldo\TextGenerator\TextFunction
  */
@@ -34,7 +34,7 @@ class ShuffleFunction implements FunctionInterface
      * @param array $arguments
      * @return string
      */
-    public function parse(array $arguments)
+    public function execute(array $arguments)
     {
         if (count($arguments) < 2) {
             Throw new \InvalidArgumentException(
@@ -44,7 +44,7 @@ class ShuffleFunction implements FunctionInterface
 
         $separator = array_shift($arguments);
 
-        $arguments = array_map("trim", $arguments);
+        $arguments = array_filter(array_map("trim", $arguments));
 
         shuffle($arguments);
 

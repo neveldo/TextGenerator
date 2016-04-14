@@ -8,7 +8,7 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
  * Class RandomFunction
  * Parser for 'random' function :  returns randomly one of the function arguments
  * Examples :
- * random{one|two|three}
+ * #random{one|two|three}
  *
  * @package Neveldo\TextGenerator\TextFunction
  */
@@ -33,7 +33,7 @@ class RandomFunction implements FunctionInterface
      * @param array $arguments
      * @return string
      */
-    public function parse(array $arguments)
+    public function execute(array $arguments)
     {
         return trim($arguments[array_rand($arguments)]);
     }

@@ -10,10 +10,10 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  * Parser for 'if' function: handle conditions a return the "then statement" or the "else statement"
  * Depending on the condition evaluation
  * Examples :
- * if{@val = 5|then statement}
- * if{@val = 5|then statement|else statement}
- * if{@val < 5 or %val% > 15|then statement|else statement}
- * if{@val > 5 and val < 15|then statement|else statement}
+ * #if{@val = 5|then statement}
+ * #if{@val = 5|then statement|else statement}
+ * #if{@val < 5 or %val% > 15|then statement|else statement}
+ * #if{@val > 5 and val < 15|then statement|else statement}
  *
  * More information about the syntax for the condition : http://symfony.com/doc/current/components/expression_language/syntax.html
  *
@@ -40,7 +40,7 @@ class IfFunction implements FunctionInterface
      * @param array $arguments
      * @return string
      */
-    public function parse(array $arguments)
+    public function execute(array $arguments)
     {
         if (count($arguments) !== 2 && count($arguments) !== 3) {
             Throw new \InvalidArgumentException(
