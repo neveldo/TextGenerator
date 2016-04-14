@@ -64,10 +64,8 @@ class TextGenerator
 
         $this->tagReplacer->setTags($data);
 
-        return trim(
-            $this->tagReplacer->replace(
-                $this->parse($this->template)
-            )
+        return $this->tagReplacer->replace(
+            $this->parse($this->template)
         );
     }
 
@@ -81,7 +79,7 @@ class TextGenerator
         if (is_array($input)) {
 
             // Match the function name and the argment lists
-            preg_match('/([a-z_]+)\{(.*)\}/s', $input[0], $matches);
+            preg_match('/#([a-z_]+)\{(.*)\}/s', $input[0], $matches);
 
             // Split the arguments list (separator = '|')
             $strArray = preg_split('//u', $matches[2], -1, PREG_SPLIT_NO_EMPTY);
@@ -113,9 +111,9 @@ class TextGenerator
             }
 
             // Call the proper text function
-            $input = $this->getFunction($matches[1])->parse($arguments);
+            $input = $this->getFunction($matches[1])->execute($arguments);
         }
-        return preg_replace_callback('/([a-z_]+\{(?:[^\{\}]|(?R))+\})/s', [$this, 'parse'], $input);
+        return preg_replace_callback('/(#[a-z_]+\{(?:[^\{\}]|(?R))+\})/s', [$this, 'parse'], $input);
     }
 
     /**
