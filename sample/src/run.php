@@ -12,8 +12,6 @@ $template = <<<EOF
 @firstname @lastname is an @nationality #if{@sex == 'm'|actor|actress} of @age years old. #if{@sex == 'm'|He|She} was born in @birthdate in @birth_city (@birth_country). #shuffle{ |#random{Throughout|During|All along} #if{@sex == 'm'|his|her} career, @lastname was nominated @nominations_number time#if{@nominations_number > 1|s} for the oscars and has won @awards_number time#if{@awards_number > 1|s}.|#if{@awards_number > 1 and (@awards_number / @nominations_number) >= 0.5|@lastname is accustomed to win oscars}|@firstname @lastname first movie, "@first_movie_name", was shot in @first_movie_year.|One of #if{@sex == 'm'|his|her} most #random{famous|important|major} #random{film|movie} is @famous_movie_name and has been released in @famous_movie_year. #random{|Indeed, }@famous_movie_name #random{earned|gained|made|obtained} @famous_movie_earn #random{worldwide|#random{across|around} the world}.}
 EOF;
 
-// #if{@awards_number > 1 and (@awards_number / @nominations_number) >= 0.5|@lastname is accustomed to win oscars}
-
 $data = [
     [
         'firstname' => 'Leonardo',
