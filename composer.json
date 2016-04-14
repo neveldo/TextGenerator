@@ -1,6 +1,6 @@
 {
-    "name": "neveldo/spin-generator",
-    "description" : "Spin Generator Proof-Of-Concept.",
+    "name": "neveldo/text-generator",
+    "description" : "TextGenerator is a tool that aims to automate the generation of text from data by using a template.",
     "type": "library",
     "license": "MIT",
     "require": {
