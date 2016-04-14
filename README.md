@@ -1,6 +1,4 @@
-Just a POC of a "simple but extensible" generator of automated texts. Feel free to comment and contribute.
-
-It allows to generate automated text from a template and some data (tags).
+TextGenerator is a tool that aims to automate the generation of text from data by using a template. Feel free to comment and contribute.
 
 # Tags
 
