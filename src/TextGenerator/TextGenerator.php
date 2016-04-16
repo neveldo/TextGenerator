@@ -88,7 +88,7 @@ class TextGenerator
             $arguments = [];
             $currentArgument = '';
             $strSize = count($strArray);
-            for ($i = 0; $i < $strSize;++$i) {
+            for ($i = 0; $i < $strSize; ++$i) {
                 if (($strArray[$i] === '|') && $depth  === 0) {
                     $arguments[] = $currentArgument;
                     $currentArgument = '';
