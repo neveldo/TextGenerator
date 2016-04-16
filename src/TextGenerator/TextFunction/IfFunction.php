@@ -39,6 +39,7 @@ class IfFunction implements FunctionInterface
      * Handle If function
      * @param array $arguments
      * @return string
+     * @Throw InvalidArgumentException if the number of arguments is not valid
      */
     public function execute(array $arguments)
     {
