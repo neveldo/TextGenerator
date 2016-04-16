@@ -132,12 +132,12 @@ class TextGenerator
      * Get a function from its name
      * @param $name
      * @return FunctionInterface
-     * @Thow \RuntimeException if the function doesn't exist
+     * @Thow \InvalidArgumentException if the function doesn't exist
      */
     public function getFunction($name)
     {
         if (!array_key_exists($name, $this->functions)) {
-            Throw new \RuntimeException(sprintf("Error : function '%s' doesn't exist.", $name));
+            Throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $name));
         }
         return $this->functions[$name];
     }
@@ -166,11 +166,12 @@ class TextGenerator
      * Set the template
      * @param string $template
      * @return $this
+     * @Thow \InvalidArgumentException if the template isn't valid
      */
     public function setTemplate($template)
     {
         if (substr_count($template, '{') !== substr_count($template, '}')) {
-            Throw new \RuntimeException("Template syntax error, please check functions brackets.");
+            Throw new \InvalidArgumentException("Template syntax error, please check functions brackets.");
         }
         $this->template = $template;
         return $this;
