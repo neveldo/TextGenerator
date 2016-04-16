@@ -2,8 +2,8 @@
 
 namespace Neveldo\TextGenerator;
 
-use Neveldo\TextGenerator\TextFunction\IfFunction;
 use Neveldo\TextGenerator\TextFunction\FunctionInterface;
+use Neveldo\TextGenerator\TextFunction\IfFunction;
 use Neveldo\TextGenerator\TextFunction\RandomFunction;
 use Neveldo\TextGenerator\TextFunction\ShuffleFunction;
 use Neveldo\TextGenerator\Tag\TagReplacer;
