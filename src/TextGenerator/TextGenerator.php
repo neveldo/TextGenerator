@@ -132,7 +132,7 @@ class TextGenerator
      * Get a function from its name
      * @param $name
      * @return FunctionInterface
-     * @Thow \InvalidArgumentException if the function doesn't exist
+     * @Throw \InvalidArgumentException if the function doesn't exist
      */
     public function getFunction($name)
     {
@@ -166,7 +166,7 @@ class TextGenerator
      * Set the template
      * @param string $template
      * @return $this
-     * @Thow \InvalidArgumentException if the template isn't valid
+     * @Throw \InvalidArgumentException if the template isn't valid
      */
     public function setTemplate($template)
     {
