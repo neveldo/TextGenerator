@@ -61,7 +61,7 @@ Examples :
 
 Template :
 
-> @firstname @lastname is an @nationality #if{@sex == 'm'|actor|actress} of @age years old. #if{@sex == 'm'|He|She} was born in @birthdate in @birth_city (@birth_country). #shuffle{ |#random{Throughout|During|All along} #if{@sex == 'm'|his|her} career, @lastname was nominated @nominations_number time#if{@nominations_number > 1|s} for the oscars and has won @awards_number time#if{@awards_number > 1|s}.|#if{@awards_number > 1 and (@awards_number / @nominations_number) >= 0.5|@lastname is accustomed to win oscars}|@firstname @lastname first movie, "@first_movie_name", was shot in @first_movie_year.|One of #if{@sex == 'm'|his|her} most #random{famous|important|major} #random{film|movie} is @famous_movie_name and has been released in @famous_movie_year. #random{|Indeed, }@famous_movie_name #random{earned|gained|made|obtained} @famous_movie_earn #random{worldwide|#random{across|around} the world}.}
+> @firstname @lastname is an @nationality #if{@sex == 'm'|actor|actress} of @age years old. #if{@sex == 'm'|He|She} was born in @birthdate in @birth_city (@birth_country). #shuffle{ |#random{Throughout|During|All along} #if{@sex == 'm'|his|her} career, @lastname was nominated @nominations_number time#if{@nominations_number > 1|s} for the oscars and has won @awards_number time#if{@awards_number > 1|s}.|#if{@awards_number > 1 and (@awards_number / @nominations_number) >= 0.5|@lastname is accustomed to win oscars.}|@firstname @lastname first movie, "@first_movie_name", was shot in @first_movie_year.|One of #if{@sex == 'm'|his|her} most #random{famous|important|major} #random{film|movie} is @famous_movie_name and has been released in @famous_movie_year. #random{|Indeed, }@famous_movie_name #random{earned|gained|made|obtained} @famous_movie_earn #random{worldwide|#random{across|around} the world}.}
 
 Data :
 
@@ -108,7 +108,7 @@ Output :
 
 > Leonardo DiCaprio is an American actor of 41 years old. He was born in November 11, 1974 in Hollywood (US). All along his career, DiCaprio was nominated 6 times for the oscars and has won 1 time. One of his most famous movie is Titanic and has been released in 1997. Titanic earned $2,185,372,302 across the world. Leonardo DiCaprio first movie, "Critters 3", was shot in 1991. 
 
-> Jodie Foster is an American actress of 51 years old. She was born in November 19, 1962 in Los Angeles (US). Jodie Foster first movie, "My Sister Hank", was shot in 1972. Throughout her career, Foster was nominated 4 times for the oscars and has won 2 times. Foster is accustomed to win oscars One of her most important film is Taxi Driver and has been released in 1976. Taxi Driver made $28,262,574 around the world.
+> Jodie Foster is an American actress of 51 years old. She was born in November 19, 1962 in Los Angeles (US). Jodie Foster first movie, "My Sister Hank", was shot in 1972. Throughout her career, Foster was nominated 4 times for the oscars and has won 2 times. Foster is accustomed to win oscars. One of her most important film is Taxi Driver and has been released in 1976. Taxi Driver made $28,262,574 around the world.
 
 ## Create a new function
 
