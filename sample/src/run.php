@@ -9,7 +9,7 @@ require __DIR__ . '/../../vendor/autoload.php';
 use Neveldo\TextGenerator\TextGenerator;
 
 $template = <<<EOF
-@firstname @lastname is an @nationality #if{@sex == 'm'|actor|actress} of @age years old. #if{@sex == 'm'|He|She} was born in @birthdate in @birth_city (@birth_country). #shuffle{ |#random{Throughout|During|All along} #if{@sex == 'm'|his|her} career, @lastname was nominated @nominations_number time#if{@nominations_number > 1|s} for the oscars and has won @awards_number time#if{@awards_number > 1|s}.|#if{@awards_number > 1 and (@awards_number / @nominations_number) >= 0.5|@lastname is accustomed to win oscars.}|@firstname @lastname first movie, "@first_movie_name", was shot in @first_movie_year.|One of #if{@sex == 'm'|his|her} most #random{famous|important|major} #random{film|movie} is @famous_movie_name and has been released in @famous_movie_year. #random{|Indeed, }@famous_movie_name #random{earned|gained|made|obtained} @famous_movie_earn #random{worldwide|#random{across|around} the world}.}
+@firstname @lastname is an @nationality #if{sex == 'm'|actor|actress} of @age years old. #if{sex == 'm'|He|She} was born in @birthdate in @birth_city (@birth_country). #shuffle{ |#random{Throughout|During|All along} #if{sex == 'm'|his|her} career, @lastname was nominated @nominations_number time#if{nominations_number > 1|s} for the oscars and has won @awards_number time#if{awards_number > 1|s}.|#if{awards_number > 1 and (awards_number / nominations_number) >= 0.5|@lastname is accustomed to win oscars.}|@firstname @lastname first movie, "@first_movie_name", was shot in @first_movie_year.|One of #if{sex == 'm'|his|her} most #random{famous|important|major} #random{film|movie} is @famous_movie_name and has been released in @famous_movie_year. #random{|Indeed, }@famous_movie_name #random{earned|gained|made|obtained} @famous_movie_earn #random{worldwide|#random{across|around} the world}. #loop{other_famous_movies|*|true|, | and |@name (@year)} are some other great movies from @lastname.}
 EOF;
 
 $data = [
@@ -29,7 +29,21 @@ $data = [
         'first_movie_year' => 1991,
         'famous_movie_name' => 'Titanic',
         'famous_movie_year' => 1997,
-        'famous_movie_earn' => '$2,185,372,302'
+        'famous_movie_earn' => '$2,185,372,302',
+        'other_famous_movies' => [
+            [
+                'name' => 'Catch Me If You Can',
+                'year' => 2002
+            ],
+            [
+                'name' => 'Shutter Island',
+                'year' => 2010
+            ],
+            [
+                'name' => 'Inception',
+                'year' => 2010
+            ],
+        ]
     ],
     [
         'firstname' => 'Jodie',
@@ -47,12 +61,26 @@ $data = [
         'first_movie_year' => 1972,
         'famous_movie_name' => 'Taxi Driver',
         'famous_movie_year' => 1976,
-        'famous_movie_earn' => '$28,262,574'
+        'famous_movie_earn' => '$28,262,574',
+        'other_famous_movies' => [
+            [
+                'name' => 'The Silence of the Lambs',
+                'year' => 1991
+            ],
+            [
+                'name' => 'Contact',
+                'year' => null // Empty values are skipped by the parser
+            ],
+            [
+                'name' => 'The Accused',
+                'year' => 1988
+            ],
+        ]
     ],
 ];
 
 $tg = new TextGenerator();
-$tg->setTemplate($template);
+$tg->compile($template);
 
 foreach($data as $actorData) {
     echo $tg->generate($actorData) . "\n\n";
