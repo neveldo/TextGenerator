@@ -6,7 +6,7 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
 /**
  * Class RandomFunction
- * Parser for 'random' function :  returns randomly one of the function arguments
+ * 'random' function :  returns randomly one of the function arguments
  * Examples :
  * #random{one|two|three}
  *
@@ -35,7 +35,12 @@ class RandomFunction implements FunctionInterface
      */
     public function execute(array $arguments)
     {
-        return trim($arguments[array_rand($arguments)]);
+        // Remove empty arguments and arguments that contain empty tags
+        $arguments = array_filter($arguments, function($item) {
+            return  ($item !== '' && strpos($item, $this->tagReplacer->getEmptyTag()) === false);
+        });
+
+        return $arguments[array_rand($arguments)];
     }
 
 }
