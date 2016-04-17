@@ -10,6 +10,11 @@ namespace Neveldo\TextGenerator\Tag;
 class TagReplacer implements TagReplacerInterface
 {
     /**
+     * @const string the tag
+     */
+    const EMPTY_TAG = '[EMPTY]';
+
+    /**
      * @var array tags, format : ['tag_name' => 'value', ...]
      */
     private $tags;
@@ -30,7 +35,16 @@ class TagReplacer implements TagReplacerInterface
 
         $this->escapedTags = [];
         foreach($this->tags as $tag => $value) {
-            $this->escapedTags['@' . $tag] = $value;
+
+            // Replace empty values by [EMPTY_TAG] in order to be able to remove easily
+            // the parts that contains this tag later to avoid inconsistent sentences
+            if ($value === null || $value === '') {
+                $value = $this->getEmptyTag();
+            }
+
+            if (is_scalar($value)) {
+                $this->escapedTags['@' . $tag] = $value;
+            }
         }
     }
 
@@ -42,6 +56,19 @@ class TagReplacer implements TagReplacerInterface
     public function replace($content)
     {
         return strtr($content, $this->escapedTags);
+    }
+
+    /**
+     * Return a tag by its name
+     * @param $name
+     * @return string|array
+     */
+    public function getTag($name)
+    {
+        if (isset($this->tags[$name])) {
+            return $this->tags[$name];
+        }
+        return null;
     }
 
     /**
@@ -60,5 +87,12 @@ class TagReplacer implements TagReplacerInterface
     public function getEscapedTags()
     {
         return $this->escapedTags;
+    }
+
+    /**
+     * @return string the empty tag
+     */
+    public function getEmptyTag() {
+        return self::EMPTY_TAG;
     }
 }

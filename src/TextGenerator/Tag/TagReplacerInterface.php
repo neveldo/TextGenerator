@@ -23,6 +23,13 @@ interface TagReplacerInterface
     public function replace($content);
 
     /**
+     * Return a tag by its name
+     * @param $name
+     * @return string|array
+     */
+    public function getTag($name);
+
+    /**
      * Return the array of available tags
      * @return array
      */
@@ -33,4 +40,9 @@ interface TagReplacerInterface
      * @return array
      */
     public function getEscapedTags();
+
+    /**
+     * @return string the empty tag
+     */
+    public function getEmptyTag();
 }
