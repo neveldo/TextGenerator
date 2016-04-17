@@ -7,7 +7,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
  * Class IfParser
- * Parser for 'if' function: handle conditions a return the "then statement" or the "else statement"
+ * 'if' function: handle conditions a return the "then statement" or the "else statement"
  * Depending on the condition evaluation
  * Examples :
  * #if{@val = 5|then statement}
@@ -45,18 +45,13 @@ class IfFunction implements FunctionInterface
     {
         if (count($arguments) !== 2 && count($arguments) !== 3) {
             Throw new \InvalidArgumentException(
-                sprintf("IfParser expect exactly two (condition, then statement) or three (condition, then statement, else statement) parameters, %d given.", count($arguments))
+                sprintf("IfFunction expect exactly two (condition, then statement) or three (condition, then statement, else statement) parameters, %d given.", count($arguments))
             );
         }
 
         $language = new ExpressionLanguage();
-        $condition = str_replace(
-            array_keys($this->tagReplacer->getEscapedTags()),
-            array_keys($this->tagReplacer->getTags()),
-            $arguments[0]
-        );
 
-        if ($language->evaluate($condition, $this->tagReplacer->getTags())) {
+        if ($language->evaluate($arguments[0], $this->tagReplacer->getTags())) {
             return $arguments[1];
         } else if (isset($arguments[2])) {
             return $arguments[2];
