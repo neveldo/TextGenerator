@@ -74,11 +74,6 @@ Example with the tag 'tag_name' that contains the array `[['name' => 'Bill'], ['
     
 It will output : `Hello dear John, dear Bob and dear Bill.`
 
-    #if{val = 5|the value equals 5}
-    #if{val = 5|the value equals 5|the value doesn't equal 5}
-    #if{val < 5 or val > 15|the value is lower that 5 or greater that 15|the value is between 5 and 15}
-    #if{(val > 5 and val < 15) or (val > 10 and val < 30)|then statement ...|else statement ...}
-
 ## Complete example :
 
 Template :
