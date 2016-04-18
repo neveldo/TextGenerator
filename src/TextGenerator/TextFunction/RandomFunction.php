@@ -40,6 +40,10 @@ class RandomFunction implements FunctionInterface
             return  ($item !== '' && strpos($item, $this->tagReplacer->getEmptyTag()) === false);
         });
 
+        if (count($arguments) === 0) {
+            return '';
+        }
+
         return $arguments[array_rand($arguments)];
     }
 
