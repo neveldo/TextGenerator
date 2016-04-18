@@ -167,4 +167,4 @@ You can extend the TextGenerator capabilities by adding your own text funtions. 
 
 ## Install
 
-$ composer require neveldo/text-generator
+    $ composer require neveldo/text-generator
