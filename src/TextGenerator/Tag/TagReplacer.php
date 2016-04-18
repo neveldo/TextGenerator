@@ -17,13 +17,13 @@ class TagReplacer implements TagReplacerInterface
     /**
      * @var array tags, format : ['tag_name' => 'value', ...]
      */
-    private $tags;
+    private $tags = [];
 
     /**
      * @var array escaped tags to use for text replacement
      * format : ['@tag_name' => 'value', ...]
      */
-    private $escapedTags;
+    private $escapedTags = [];
 
     /**
      * Initialize the tags list
