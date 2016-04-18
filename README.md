@@ -1,8 +1,14 @@
 # TextGenerator
 
-TextGenerator is a tool that aims to automate the generation of text from data by using a template. 
-In the template, you can use tags and call functions.
-Feel free to comment and contribute.
+TextGenerator is a PHP package that aims to generate automated texts  from data. Feel free to comment and contribute.
+
+## Features
+
+- Text generation from template
+- Tags replacement
+- Text functions (core functions : random, shuffle, if, loop)
+- Nested function calls
+- Skip parts that contain empty values to prevent inconsistency in the generated text
 
 ## Tags
 
