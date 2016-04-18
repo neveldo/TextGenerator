@@ -164,3 +164,7 @@ Output :
 ## Create a new function
 
 You can extend the TextGenerator capabilities by adding your own text funtions. In order to create a new function for the TextGenerator, you just have to implement the FunctionInterface and call registerFunction() method on the TextGenerator instance. Then, you will be able to call it from your templates.
+
+## Install
+
+$ composer require neveldo/text-generator
