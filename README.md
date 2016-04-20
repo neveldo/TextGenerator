@@ -34,7 +34,7 @@ Returns randomly one of the arguments
 
 Template example :
 
-    #randon{one|two|three}
+    #random{one|two|three}
 
 Output example :
 
