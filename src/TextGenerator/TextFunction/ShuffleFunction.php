@@ -22,11 +22,11 @@ class ShuffleFunction implements FunctionInterface
 
     /**
      * ShuffleParser constructors
-     * @param TagReplacerInterface $tr
+     * @param TagReplacerInterface $tagReplacer
      */
-    public function __construct(TagReplacerInterface $tr)
+    public function __construct(TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tr;
+        $this->tagReplacer = $tagReplacer;
     }
 
     /**

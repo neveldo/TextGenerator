@@ -49,15 +49,15 @@ class TextGenerator
 
     /**
      * TextGenerator constructor.
-     * @param TagReplacerInterface|null $tr
+     * @param TagReplacerInterface|null $tagReplacer
      */
-    public function __construct(TagReplacerInterface $tr = null)
+    public function __construct(TagReplacerInterface $tagReplacer = null)
     {
         // Init the tag replacer
-        if ($tr === null) {
-            $tr = new TagReplacer();
+        if ($tagReplacer === null) {
+            $tagReplacer = new TagReplacer();
         }
-        $this->tagReplacer = $tr;
+        $this->tagReplacer = $tagReplacer;
 
         // Init core text functions
         $this
@@ -188,12 +188,12 @@ class TextGenerator
 
     /**
      * Set the tag replacer
-     * @param TagReplacerInterface $tr
+     * @param TagReplacerInterface $tagReplacer
      * @return $this
      */
-    public function setTagReplacer(TagReplacerInterface $tr)
+    public function setTagReplacer(TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tr;
+        $this->tagReplacer = $tagReplacer;
         return $this;
     }
 

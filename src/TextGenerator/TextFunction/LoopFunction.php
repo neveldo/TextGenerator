@@ -30,11 +30,11 @@ class LoopFunction implements FunctionInterface
 
     /**
      * RandomParser constructor.
-     * @param TagReplacerInterface $tr
+     * @param TagReplacerInterface $tagReplacer
      */
-    public function __construct(TagReplacerInterface $tr)
+    public function __construct(TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tr;
+        $this->tagReplacer = $tagReplacer;
     }
 
     /**

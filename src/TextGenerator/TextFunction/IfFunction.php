@@ -28,11 +28,11 @@ class IfFunction implements FunctionInterface
 
     /**
      * IfParser constructor.
-     * @param TagReplacerInterface $tr
+     * @param TagReplacerInterface $tagReplacer
      */
-    public function __construct(TagReplacerInterface $tr)
+    public function __construct(TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tr;
+        $this->tagReplacer = $tagReplacer;
     }
 
     /**
