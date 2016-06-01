@@ -45,7 +45,7 @@ class LoopFunction implements FunctionInterface
     public function execute(array $arguments)
     {
         if (count($arguments) !== 6) {
-            Throw new \InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf("Loop expect exactly six parameters, %d given.", count($arguments))
             );
         }

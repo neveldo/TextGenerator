@@ -116,7 +116,7 @@ class TextGenerator
      * Prepare the template by parsing the function calls within it
      * @param string $template The template to compile
      * @return $this
-     * @Throw \InvalidArgumentException if the template contains unknown functions
+     * @throw \InvalidArgumentException if the template contains unknown functions
      */
     public function compile($template)
     {
@@ -136,7 +136,7 @@ class TextGenerator
      * Parse recursively the template to extract the execution stack
      * @param string $template
      * @return string $template
-     * @Throw \InvalidArgumentException if the template contains unknown functions
+     * @throw \InvalidArgumentException if the template contains unknown functions
      */
     protected function compileTemplate($template) {
         if (is_array($template)) {
@@ -147,7 +147,7 @@ class TextGenerator
             // Add the function call into the execution stack
             $functionName = substr($template, 1, strpos($template, '{') - 1);
             if (!in_array($functionName, array_keys($this->functions))) {
-                Throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $functionName));
+                throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $functionName));
             }
             $this->executionStack[$this->executionStackSize] = $functionName;
 
@@ -176,12 +176,12 @@ class TextGenerator
      * Get a function from its name
      * @param $name
      * @return FunctionInterface
-     * @Throw \InvalidArgumentException if the function doesn't exist
+     * @throw \InvalidArgumentException if the function doesn't exist
      */
     public function getFunction($name)
     {
         if (!array_key_exists($name, $this->functions)) {
-            Throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $name));
+            throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $name));
         }
         return $this->functions[$name];
     }

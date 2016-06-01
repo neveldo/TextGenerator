@@ -39,12 +39,12 @@ class IfFunction implements FunctionInterface
      * Handle If function
      * @param array $arguments
      * @return string
-     * @Throw InvalidArgumentException if the number of arguments is not valid
+     * @throw InvalidArgumentException if the number of arguments is not valid
      */
     public function execute(array $arguments)
     {
         if (count($arguments) !== 2 && count($arguments) !== 3) {
-            Throw new \InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf("IfFunction expect exactly two (condition, then statement) or three (condition, then statement, else statement) parameters, %d given.", count($arguments))
             );
         }

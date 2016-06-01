@@ -37,7 +37,7 @@ class ShuffleFunction implements FunctionInterface
     public function execute(array $arguments)
     {
         if (count($arguments) < 2) {
-            Throw new \InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf("ShuffleFunction expect at least two parameters, %d given.", count($arguments))
             );
         }
