@@ -72,6 +72,7 @@ class TextGenerator
      * Generate an automated text from data
      * @param array $data that will feed the tags within the template
      * @return string the generated text
+     * @throw Exception
      */
     public function generate(array $data)
     {
