@@ -124,7 +124,8 @@ class TextGenerator
         $this->template = $template;
         $this->executionStack = [];
         $this->executionStackSize = 0;
-        $this->compiledTemplate = $this->compileTemplate($template);
+        $this->compiledTemplate = preg_replace('/;;\s+/m', '', $template);
+        $this->compiledTemplate = $this->compileTemplate($this->compiledTemplate);
 
         // Reverse the execution stack in order to execute the deepest
         // functions first and end with the shallowest ones
