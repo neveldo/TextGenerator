@@ -78,7 +78,7 @@ class TagReplacer implements TagReplacerInterface
     {
         $escapedTag = '@' . $tagName;
         if (isset($this->escapedTags[$escapedTag])) {
-            return strtr($content, $escapedTag, $this->escapedTags[$escapedTag]);
+            return str_replace($escapedTag, $this->escapedTags[$escapedTag], $content);
         }
         return $content;
     }
