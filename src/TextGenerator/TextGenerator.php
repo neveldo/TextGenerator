@@ -6,6 +6,7 @@ use Neveldo\TextGenerator\TextFunction\FunctionInterface;
 use Neveldo\TextGenerator\TextFunction\IfFunction;
 use Neveldo\TextGenerator\TextFunction\LoopFunction;
 use Neveldo\TextGenerator\TextFunction\RandomFunction;
+use Neveldo\TextGenerator\TextFunction\SetFunction;
 use Neveldo\TextGenerator\TextFunction\ShuffleFunction;
 use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
@@ -40,12 +41,7 @@ class TextGenerator
     /**
      * @var array execution stack to run for generating a text
      */
-    private $executionStack = [];
-
-    /**
-     * @var int execution stack size
-     */
-    private $executionStackSize = 0;
+    private $statementsStack = [];
 
     /**
      * TextGenerator constructor.
@@ -65,6 +61,7 @@ class TextGenerator
             ->registerFunction('random', new RandomFunction($this->tagReplacer))
             ->registerFunction('if', new IfFunction($this->tagReplacer))
             ->registerFunction('loop', new LoopFunction($this->tagReplacer))
+            ->registerFunction('set', new SetFunction($this->tagReplacer))
         ;
     }
 
@@ -87,10 +84,10 @@ class TextGenerator
 
         // Execute the functions stack starting with the deepest functions and ending
         // with the shallowest ones
-        foreach($this->executionStack as $functionId => $functionName) {
+        foreach($this->statementsStack as $statement) {
 
-            $openingTag = '[' . $functionId . ']';
-            $closingTag =  '[/' . $functionId . ']';
+            $openingTag = '[' . $statement['id'] . ']';
+            $closingTag =  '[/' . $statement['id'] . ']';
             $openingTagLastPos = strpos($text, $openingTag) + strlen($openingTag);
 
             // Extract the argument list  of the function
@@ -104,10 +101,16 @@ class TextGenerator
             // Replace the function call in the template by the returned value
             $text = substr_replace(
                 $text,
-                $this->getFunction($functionName)->execute($arguments),
+                $this->getFunction($statement['function'])->execute($arguments),
                 strpos($text, $openingTag),
                 strpos($text, $closingTag) + strlen($closingTag) - strpos($text, $openingTag)
             );
+
+            if ($statement['function'] === 'set') {
+                // After a tag affectation, parse this tag in all the text in order to replace
+                // Them with the proper value
+                $text = $this->tagReplacer->replaceOne($text, $arguments[0]);
+            }
         }
 
         return $text;
@@ -122,16 +125,37 @@ class TextGenerator
     public function compile($template)
     {
         $this->template = $template;
-        $this->executionStack = [];
-        $this->executionStackSize = 0;
-        $this->compiledTemplate = preg_replace('/;;\s+/m', '', $template);
+        $this->statementsStack = [];
+
+        $this->compiledTemplate = $this->parseIndentations($template);
         $this->compiledTemplate = $this->compileTemplate($this->compiledTemplate);
 
-        // Reverse the execution stack in order to execute the deepest
-        // functions first and end with the shallowest ones
-        $this->executionStack = array_reverse($this->executionStack, true);
+        // Sort the execution stack in order to execute the deepest
+        // functions first and end with the shallowest ones but preserving the order of
+        // calls that have the same depth level
+        uasort(
+            $this->statementsStack,
+            function($a, $b) {
+                if ($b['depth'] - $a['depth'] !== 0) {
+                    return $b['depth'] - $a['depth'];
+                } else {
+                    return $a['id'] - $b['id'];
+                }
+            }
+        );
 
         return $this;
+    }
+
+    /**
+     * Remove the ;; followed by any space characters from the
+     * template
+     * @param string $template
+     * @return string
+     */
+    public function parseIndentations($template)
+    {
+        return preg_replace('/;;\s+/m', '', $template);
     }
 
     /**
@@ -141,25 +165,44 @@ class TextGenerator
      * @throw \InvalidArgumentException if the template contains unknown functions
      */
     protected function compileTemplate($template) {
-        if (is_array($template)) {
 
-            // $template = '#fct{...}'
-            $template = $template[1];
+        $replacements = -1;
+        $depth = 0;
+        $statementsStackSize = 0;
+        while($replacements !== 0) {
+            $template = preg_replace_callback(
+                '/(#[a-z_]+\{(?:[^\{\}]|(?R))+\})/s',
+                function($template) use ($depth, &$statementsStackSize) {
+                    // $template = '#fct{...}'
+                    $template = $template[1];
 
-            // Add the function call into the execution stack
-            $functionName = substr($template, 1, strpos($template, '{') - 1);
-            if (!in_array($functionName, array_keys($this->functions))) {
-                throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $functionName));
-            }
-            $this->executionStack[$this->executionStackSize] = $functionName;
+                    // Add the function call into the execution stack
+                    $functionName = substr($template, 1, strpos($template, '{') - 1);
+                    if (!in_array($functionName, array_keys($this->functions))) {
+                        throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $functionName));
+                    }
+                    $this->statementsStack[$statementsStackSize] = [
+                        'id' => $statementsStackSize,
+                        'function' => $functionName,
+                        'depth' => $depth
+                    ];
 
-            // Update the template to replace function calls by references to the execution stack like : [9]...[/9]
-            $template = substr_replace($template, '[' . $this->executionStackSize . ']', 0, strpos($template, '{') + 1);
-            $template = substr_replace($template, '[/' . $this->executionStackSize . ']', strlen($template) - 1);
+                    // Update the template to replace function calls by references to the execution stack like : [9]...[/9]
+                    $template = substr_replace($template, '[' . $statementsStackSize . ']', 0, strpos($template, '{') + 1);
+                    $template = substr_replace($template, '[/' . $statementsStackSize . ']', strlen($template) - 1);
 
-            ++$this->executionStackSize;
+                    ++$statementsStackSize;
+
+                    return $template;
+                },
+                $template,
+                -1,
+                $replacements
+            );
+
+            ++$depth;
         }
-        return preg_replace_callback('/(#[a-z_]+\{(?:[^\{\}]|(?R))+\})/s', [$this, 'compileTemplate'], $template);
+        return $template;
     }
 
     /**
