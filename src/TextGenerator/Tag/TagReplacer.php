@@ -31,20 +31,30 @@ class TagReplacer implements TagReplacerInterface
      */
     public function setTags(array $tags)
     {
-        $this->tags = $tags;
+        $this->tags = $this->escapedTags = [];
 
-        $this->escapedTags = [];
-        foreach($this->tags as $tag => $value) {
+        foreach($tags as $name => $value) {
+            $this->addTag($name, $value);
+        }
+    }
 
-            // Replace empty values by [EMPTY_TAG] in order to be able to remove easily
-            // the parts that contains this tag later to avoid inconsistent sentences
-            if ($value === null || $value === '') {
-                $value = $this->getEmptyTag();
-            }
+    /**
+     * Add a tag to the collection
+     * @param string $name the tag name
+     * @param string $value the tag value
+     */
+    public function addTag($name, $value)
+    {
+        $this->tags[$name] = $value;
 
-            if (is_scalar($value)) {
-                $this->escapedTags['@' . $tag] = $value;
-            }
+        // Replace empty values by [EMPTY_TAG] in order to be able to remove easily
+        // the parts that contains this tag later to avoid inconsistent sentences
+        if ($value === null || $value === '') {
+            $value = $this->getEmptyTag();
+        }
+
+        if (is_scalar($value)) {
+            $this->escapedTags['@' . $name] = $value;
         }
     }
 
@@ -56,6 +66,21 @@ class TagReplacer implements TagReplacerInterface
     public function replace($content)
     {
         return strtr($content, $this->escapedTags);
+    }
+
+    /**
+     * Replace the tag $tagName by the matching value within the content
+     * @param string $content
+     * @param string $tagName
+     * @return string
+     */
+    public function replaceOne($content, $tagName)
+    {
+        $escapedTag = '@' . $tagName;
+        if (isset($this->escapedTags[$escapedTag])) {
+            return strtr($content, $escapedTag, $this->escapedTags[$escapedTag]);
+        }
+        return $content;
     }
 
     /**
