@@ -20,7 +20,7 @@ class RandomFunction implements FunctionInterface
     private $tagReplacer;
 
     /**
-     * RandomParser constructor.
+     * RandomFunction constructor.
      * @param TagReplacerInterface $tagReplacer
      */
     public function __construct(TagReplacerInterface $tagReplacer)

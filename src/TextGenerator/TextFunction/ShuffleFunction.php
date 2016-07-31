@@ -21,7 +21,7 @@ class ShuffleFunction implements FunctionInterface
     private $tagReplacer;
 
     /**
-     * ShuffleParser constructors
+     * ShuffleFunction constructors
      * @param TagReplacerInterface $tagReplacer
      */
     public function __construct(TagReplacerInterface $tagReplacer)

@@ -29,7 +29,7 @@ class LoopFunction implements FunctionInterface
     private $tagReplacer;
 
     /**
-     * RandomParser constructor.
+     * LoopFunction constructor.
      * @param TagReplacerInterface $tagReplacer
      */
     public function __construct(TagReplacerInterface $tagReplacer)

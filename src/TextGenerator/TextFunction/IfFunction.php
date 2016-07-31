@@ -6,7 +6,7 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
- * Class IfParser
+ * Class IfFunction
  * 'if' function: handle conditions a return the "then statement" or the "else statement"
  * Depending on the condition evaluation
  * Examples :
@@ -27,7 +27,7 @@ class IfFunction implements FunctionInterface
     private $tagReplacer;
 
     /**
-     * IfParser constructor.
+     * IfFunction constructor.
      * @param TagReplacerInterface $tagReplacer
      */
     public function __construct(TagReplacerInterface $tagReplacer)
