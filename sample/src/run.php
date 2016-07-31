@@ -17,7 +17,7 @@ $template = <<<EOF
     #if{awards_number > 1 and (awards_number / nominations_number) >= 0.5|@lastname is accustomed to win oscars.}|;;
     @firstname @lastname first movie, "@first_movie_name", was shot in @first_movie_year.|;;
     One of #if{sex == 'm'|his|her} most #random{famous|important|major} #random{film|movie} is @famous_movie_name and has been released in @famous_movie_year. ;;
-        #random{|Indeed, }@famous_movie_name #random{earned|gained|made|obtained} @famous_movie_earn #random{worldwide|#random{across|around} the world}. ;;
+        #prandom{20:|80:Indeed, }@famous_movie_name #random{earned|gained|made|obtained} @famous_movie_earn #random{worldwide|#random{across|around} the world}. ;;
         #loop{other_famous_movies|*|true|, | and |@name (@year)} are some other great movies from @lastname.;;
 }
 EOF;
