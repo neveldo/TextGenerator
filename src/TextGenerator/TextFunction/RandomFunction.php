@@ -35,7 +35,7 @@ class RandomFunction implements FunctionInterface
      */
     public function execute(array $arguments)
     {
-        // Remove empty arguments and arguments that contain empty tags
+        // Remove arguments that contain empty tags
         $arguments = array_filter($arguments, function($item) {
             return  (strpos($item, $this->tagReplacer->getEmptyTag()) === false);
         });
