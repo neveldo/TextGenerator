@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator;
 
+use Neveldo\TextGenerator\TextFunction\ChooseFunction;
 use Neveldo\TextGenerator\TextFunction\FunctionInterface;
 use Neveldo\TextGenerator\TextFunction\IfFunction;
 use Neveldo\TextGenerator\TextFunction\LoopFunction;
@@ -64,6 +65,7 @@ class TextGenerator
             ->registerFunction('loop', new LoopFunction($this->tagReplacer))
             ->registerFunction('set', new SetFunction($this->tagReplacer))
             ->registerFunction('prandom', new ProbabilityRandomFunction($this->tagReplacer))
+            ->registerFunction('choose', new ChooseFunction($this->tagReplacer))
         ;
     }
 
