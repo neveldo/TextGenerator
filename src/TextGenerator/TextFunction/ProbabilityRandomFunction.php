@@ -36,7 +36,7 @@ class ProbabilityRandomFunction implements FunctionInterface
      */
     public function execute(array $arguments)
     {
-        // Remove empty arguments and arguments that contain empty tags
+        // Remove arguments that contain empty tags
         $arguments = array_filter($arguments, function($item) {
             return  (strpos($item, $this->tagReplacer->getEmptyTag()) === false);
         });
@@ -50,6 +50,11 @@ class ProbabilityRandomFunction implements FunctionInterface
         $optionId = 0;
 
         foreach($arguments as $argument) {
+
+            if (strpos($argument, ':') === false) {
+                continue;
+            }
+
             $probability = (int) substr($argument, 0, strpos($argument, ':'));
 
             $value = '';
@@ -65,7 +70,11 @@ class ProbabilityRandomFunction implements FunctionInterface
             $probabilities = array_merge($probabilities, array_fill(0, $probability, $optionId));
             ++$optionId;
         }
-        
+
+        if (count($options) === 0) {
+            return '';
+        }
+
         return $options[$probabilities[array_rand($probabilities)]]['value'];
     }
 }
