@@ -6,7 +6,7 @@ TextGenerator is a PHP package that aims to generate automated texts  from data.
 
 - Text generation from template
 - Tags replacement
-- Text functions (core functions : random, shuffle, if, loop)
+- Text functions (core functions : random, random with probability, shuffle, if, loop, variables assignment, ...)
 - Nested function calls
 - Skip parts that contain empty values to prevent inconsistency in the generated text
 
@@ -26,23 +26,50 @@ Output :
 
     Lorem dolor ipsum
 
+## Template indentation
+
+Use the ';;' special marker to indent your template. This marker can be inserted at any position in the template, any space characters (including tabs and line breaks) following the marker will be removed.
+
+Template :
+
+    Quare hoc quidem praeceptum, cuiuscumque est. ;;
+        ad tollendam amicitiam valet. ;;
+            potius praecipiendum fuit. ;;
+    ut eam diligentiam adhiberemus.
+
+Output :
+
+    Quare hoc quidem praeceptum, cuiuscumque est. ad tollendam amicitiam valet. potius praecipiendum fuit. ut eam diligentiam adhiberemus.
+
 ## Core functions :
 
 ### 'random'
 
-Returns randomly one of the arguments
+Return randomly one of the arguments
 
 Template example :
 
-    #random{one|two|three}
+    #random{first option|second option|third option}
 
 Output example :
 
-    two
+    second option
+
+### 'prandom'
+
+Return randomly one of the arguments, taking account of the probability set to each value. In the example below, the first parameter 'one' will have 80% of chance to be output.
+
+Template example :
+
+    #random{80:first option|10:second option|10:third option}
+
+Output example :
+
+    first option
 
 ### 'shuffle'
 
-Returns the arguments shuffled. The first argument is the separator between each others.
+Return the arguments shuffled. The first argument is the separator between each others.
 
 Template example :
 
@@ -80,11 +107,74 @@ Example with the tag 'tag_name' that contains the array `[['name' => 'Bill'], ['
     
 It will output : `Hello dear John, dear Bob and dear Bill.`
 
+### 'set'
+
+Set new tag within the template in order to be used further.
+
+Data :
+
+    [
+        [
+            'sex' => 'f',
+        ]
+    ]
+
+Template example :
+
+    #set{who|#if{sex == 'm'|boy|girl}};;
+    #set{hello|#random{Hello,Goodbye,Hi}};;
+    @hello @who
+
+Output example :
+
+    Hi girl
+
+### 'choose'
+
+Return the chosen argument among the list. The first argument is the ID of the argument to output (starting from 1).
+
+Data :
+
+    [
+        [
+            'my_choice' => 2,
+        ]
+    ]
+
+Template example :
+
+    #choose{1|one|two|three} #choose{@my_choice|one|two|three}
+
+Output example :
+
+    one two
+
+For instance, 'choose' function can be used in combination with 'set' function :
+
+Template example :
+
+    #set{my_choice|#random{1,2,3}};;
+    Lorem #choose{@my_choice|one|two|three} ipsum #choose{@my_choice|first|second|third}
+
+Output example :
+
+    Lorem two ipsum second
+
 ## Complete example :
 
 Template :
 
-> @firstname @lastname is an @nationality #if{sex == 'm'|actor|actress} of @age years old. #if{sex == 'm'|He|She} was born in @birthdate in @birth_city (@birth_country). #shuffle{ |#random{Throughout|During|All along} #if{sex == 'm'|his|her} career, @lastname was nominated @nominations_number time#if{nominations_number > 1|s} for the oscars and has won @awards_number time#if{awards_number > 1|s}.|#if{awards_number > 1 and (awards_number / nominations_number) >= 0.5|@lastname is accustomed to win oscars.}|@firstname @lastname first movie, "@first_movie_name", was shot in @first_movie_year.|One of #if{sex == 'm'|his|her} most #random{famous|important|major} #random{film|movie} is @famous_movie_name and has been released in @famous_movie_year. #random{|Indeed, }@famous_movie_name #random{earned|gained|made|obtained} @famous_movie_earn #random{worldwide|#random{across|around} the world}. #loop{other_famous_movies|*|true|, | and |@name (@year)} are some other great movies from @lastname.}
+    #set{pronoun|#if{sex == 'm'|He|She}};;
+    @firstname @lastname is an @nationality #if{sex == 'm'|actor|actress} of @age years old. ;;
+    @pronoun was born in @birthdate in @birth_city (@birth_country). ;;
+    #shuffle{ |;;
+        #random{Throughout|During|All along} #if{sex == 'm'|his|her} career, #random{@pronoun|@lastname} was nominated @nominations_number time#if{nominations_number     1|s} for the oscars and has won @awards_number time#if{awards_number > 1|s}.|;;
+        #if{awards_number > 1 and (awards_number / nominations_number) >= 0.5|@lastname is accustomed to win oscars.}|;;
+        @firstname @lastname first movie, "@first_movie_name", was shot in @first_movie_year.|;;
+        One of #if{sex == 'm'|his|her} most #random{famous|important|major} #random{film|movie} is @famous_movie_name and has been released in @famous_movie_year. ;;
+            #prandom{20:|80:Indeed, }@famous_movie_name #random{earned|gained|made|obtained} @famous_movie_earn #random{worldwide|#random{across|around} the world}. ;;
+            #loop{other_famous_movies|*|true|, | and |@name (@year)} are some other great movies from @lastname.;;
+    }
 
 Data :
 
