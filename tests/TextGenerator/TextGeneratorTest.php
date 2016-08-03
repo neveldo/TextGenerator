@@ -35,9 +35,16 @@ class TextGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($result, ['Throughout', 'During', 'All along']);
     }
 
+    public function testRandom2()
+    {
+        $this->textGenerator->compile("#random{Throughout|}");
+        $result = $this->textGenerator->generate([]);
+        $this->assertContains($result, ['Throughout', '']);
+    }
+
     public function testRandomWithEmptyArg()
     {
-        $this->textGenerator->compile("#random{Throughout||test" . $this->textGenerator->getTagReplacer()->getEmptyTag() . "test|}");
+        $this->textGenerator->compile("#random{Throughout|test" . $this->textGenerator->getTagReplacer()->getEmptyTag() . "test|}");
         $result = $this->textGenerator->generate([]);
         $this->assertEquals($result, 'Throughout');
     }
@@ -121,5 +128,16 @@ class TextGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->textGenerator->compile("#shuffle{, |one|#random{two|three}}");
         $result = $this->textGenerator->generate([]);
         $this->assertContains($result, ['one, two', 'one, three', 'two, one', 'three, one']);
+    }
+
+    public function testIdentation()
+    {
+        $this->textGenerator->compile(
+"Test1 ;;    Test2 ;;
+        	    Test3;;   
+            Test4"
+        );
+        $result = $this->textGenerator->generate([]);
+        $this->assertEquals('Test1 Test2 Test3Test4', $result);
     }
 }
