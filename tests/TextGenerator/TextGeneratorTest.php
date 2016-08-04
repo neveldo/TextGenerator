@@ -44,7 +44,7 @@ class TextGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testRandomWithEmptyArg()
     {
-        $this->textGenerator->compile("#random{Throughout|test" . $this->textGenerator->getTagReplacer()->getEmptyTag() . "test|}");
+        $this->textGenerator->compile("#random{Throughout|test" . $this->textGenerator->getTagReplacer()->getEmptyTag() . "test}");
         $result = $this->textGenerator->generate([]);
         $this->assertEquals($result, 'Throughout');
     }
