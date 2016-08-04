@@ -15,16 +15,15 @@ $template = <<<EOF
 #shuffle{ |;;
     #random{Throughout|During|All along} #if{sex == 'm'|his|her} career, #random{@pronoun|@lastname} was nominated @nominations_number time#if{nominations_number > 1|s} for the oscars and has won @awards_number time#if{awards_number > 1|s}.|;;
     #if{awards_number > 1 and (awards_number / nominations_number) >= 0.5|@lastname is accustomed to win oscars.}|;;
-    @firstname @lastname first movie, "@first_movie_name", was shot in @first_movie_year (at #expr{@age - (@current_year - @first_movie_year)} years old).|;;
+    @firstname @lastname first movie, "@first_movie_name", was shot in @first_movie_year (at #expr{@age - (#filter{timestamp|Y} - @first_movie_year)} years old).|;;
     One of #if{sex == 'm'|his|her} most #random{famous|important|major} #random{film|movie} is @famous_movie_name and has been released in @famous_movie_year. ;;
-        #prandom{20:|80:Indeed, }@famous_movie_name #random{earned|gained|made|obtained} @famous_movie_earn #random{worldwide|#random{across|around} the world}. ;;
+        #prandom{20:|80:Indeed, }@famous_movie_name #random{earned|gained|made|obtained} $#filter{number|@famous_movie_earn} #random{worldwide|#random{across|around} the world}. ;;
         #loop{other_famous_movies|*|true|, | and |@name (@year)} are some other great movies from @lastname.;;
 }
 EOF;
 
 $data = [
     [
-        'current_year' => '2016',
         'firstname' => 'Leonardo',
         'lastname' => 'DiCaprio',
         'birthdate' => 'November 11, 1974',
@@ -40,7 +39,7 @@ $data = [
         'first_movie_year' => 1991,
         'famous_movie_name' => 'Titanic',
         'famous_movie_year' => 1997,
-        'famous_movie_earn' => '$2,185,372,302',
+        'famous_movie_earn' => '2185372302',
         'other_famous_movies' => [
             [
                 'name' => 'Catch Me If You Can',
@@ -57,7 +56,6 @@ $data = [
         ]
     ],
     [
-        'current_year' => '2016',
         'firstname' => 'Jodie',
         'lastname' => 'Foster',
         'birthdate' => 'November 19, 1962',
@@ -73,7 +71,7 @@ $data = [
         'first_movie_year' => 1972,
         'famous_movie_name' => 'Taxi Driver',
         'famous_movie_year' => 1976,
-        'famous_movie_earn' => '$28,262,574',
+        'famous_movie_earn' => '28262574',
         'other_famous_movies' => [
             [
                 'name' => 'The Silence of the Lambs',

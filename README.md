@@ -84,6 +84,21 @@ Examples :
     #expr{@age - (@current_year - @first_movie_year)}
     #expr{(@value / @population) * 100}
 
+### 'filter'
+
+Filter the arguments in order to ouput a result, here are some examples :
+
+    #filter{upperfirst|@word} will output Lorem (if @word = lorem)
+    #filter{round|@value|2} will output 56.23 (if @value = 56.23346)
+    #filter{timestamp|d/m/Y|1470339485} will output 04/08/2016
+    #filter{timestamp|Y} will output 2016
+    #filter{date|2016-08-09|Y-m-d|d/m/Y} will output 09/08/2016
+    #filter{number|@value} will output 564,564 (if @value = 564564)
+    #filter{number|@value|0|,| } will output 564 564 (if @value = 564564)
+
+Available filters : round, ceil, floor, max, min, rand, number, lower, upper, lowerfirst, upperfirst, upperwords, trim, timestamp, date. For the filters
+Directly mapped to PHP functions, you can get more information into the PHP documentation for the arguments.
+
 ### 'loop'
 
 Handle loop on a tag that contains an array of multiple data. Arguments list :
@@ -255,9 +270,9 @@ Data :
 
 Output :
 
-> Leonardo DiCaprio is an American actor of 41 years old. He was born in November 11, 1974 in Hollywood (US). During his career, DiCaprio was nominated 6 times for the oscars and has won 1 time. One of his most famous film is Titanic and has been released in 1997. Indeed, Titanic gained $2,185,372,302 worldwide. Catch Me If You Can (2002), Inception (2010) and Shutter Island (2010) are some other great movies from DiCaprio. Leonardo DiCaprio first movie, "Critters 3", was shot in 1991.
+> Leonardo DiCaprio is an American actor of 41 years old. He was born in November 11, 1974 in Hollywood (US). One of his most famous film is Titanic and has been released in 1997. Indeed, Titanic obtained $2,185,372,302 around the world. Catch Me If You Can (2002), Inception (2010) and Shutter Island (2010) are some other great movies from DiCaprio. Leonardo DiCaprio first movie, "Critters 3", was shot in 1991 (at 16 years old). All along his career, He was nominated 6 times for the oscars and has won 1 time.
 
-> Jodie Foster is an American actress of 51 years old. She was born in November 19, 1962 in Los Angeles (US). Jodie Foster first movie, "My Sister Hank", was shot in 1972. One of her most important movie is Taxi Driver and has been released in 1976. Indeed, Taxi Driver made $28,262,574 worldwide. The Accused (1988) and The Silence of the Lambs (1991) are some other great movies from Foster. Foster is accustomed to win oscars. All along her career, Foster was nominated 4 times for the oscars and has won 2 times.
+> Jodie Foster is an American actress of 51 years old. She was born in November 19, 1962 in Los Angeles (US). Foster is accustomed to win oscars. One of her most important film is Taxi Driver and has been released in 1976. Indeed, Taxi Driver obtained $28,262,574 worldwide. The Accused (1988) and The Silence of the Lambs (1991) are some other great movies from Foster. Jodie Foster first movie, "My Sister Hank", was shot in 1972 (at 7 years old). Throughout her career, Foster was nominated 4 times for the oscars and has won 2 times.
 
 ## Create a new function
 

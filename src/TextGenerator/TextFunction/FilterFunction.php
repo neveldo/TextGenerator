@@ -96,6 +96,26 @@ class FilterFunction implements FunctionInterface
                 'minArgs' => 1,
                 'maxArgs' => 1
             ],
+            'timestamp' => [
+                'function' => function($format, $timestamp = null) {
+                    if (isset($timestamp)) {
+                        $timestamp = (int) $timestamp;
+                    } else {
+                        $timestamp = time();
+                    }
+                    return date($format, $timestamp);
+                },
+                'minArgs' => 1,
+                'maxArgs' => 2
+            ],
+            'date' => [
+                'function' => function($date, $fromFormat, $toFormat) {
+                    $datetime = \DateTime::createFromFormat($fromFormat, $date);
+                    return $datetime->format($toFormat);
+                },
+                'minArgs' => 3,
+                'maxArgs' => 3
+            ],
         ];
     }
 
