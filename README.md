@@ -43,6 +43,64 @@ Output :
 
 ## Core functions :
 
+### 'set'
+
+Set new tag within the template in order to be used further.
+
+Data :
+
+    [
+        [
+            'sex' => 'f',
+        ]
+    ]
+
+Template example :
+
+    #set{who|#if{sex == 'm'|boy|girl}};;
+    #set{hello|#random{Hello,Goodbye,Hi}};;
+    @hello @who
+
+Output example :
+
+    Hi girl
+
+### 'if'
+
+Display text depending on a condition. The first parameter is the condition to check for. The second parameter is returned if the condition is true. The third optional parameter is returned if the condition is false.
+Read more about the syntax for the conditions on the [Symfony website](http://symfony.com/doc/current/components/expression_language/syntax.html).
+Examples :
+
+    #if{val == 5|the value equals 5}
+    #if{val == 5|the value equals 5|the value doesn't equal 5}
+    #if{val < 5 or val > 15|the value is lower that 5 or greater that 15|the value is between 5 and 15}
+    #if{(val > 5 and val < 15) or (val > 10 and val < 30)|then statement ...|else statement ...}
+
+### 'expr'
+
+Returns the evaluated expression. Read more about the syntax for the expressions on the [Symfony website](http://symfony.com/doc/current/components/expression_language/syntax.html).
+Examples :
+
+    #expr{@age - (@current_year - @first_movie_year)}
+    #expr{(@value / @population) * 100}
+
+### 'loop'
+
+Handle loop on a tag that contains an array of multiple data. Arguments list :
+
+ - 1/ The tag that contains an array to loop on
+ - 2/ Maximum number of items to loop on ('*' to loop on all elements)
+ - 3/ Whether the items should be shuffled or not (true/false)
+ - 4/ Separator between each item
+ - 5/ Separator for the last item
+ - 6/ The template for each item
+
+Example with the tag 'tag_name' that contains the array `[['name' => 'Bill'], ['name' => 'Bob'], ['name' => 'John']]`
+
+    Hello #loop{tag_name|*|true|, | and |dear @name}.
+    
+It will output : `Hello dear John, dear Bob and dear Bill.`
+
 ### 'random'
 
 Return randomly one of the arguments
@@ -78,56 +136,6 @@ Template example :
 Output example :
 
     two three one
-
-### 'if'
-
-Handle conditions. The first parameter is the condition to check for. The second parameter is returned if the condition is true. The third optional parameter is returned if the condition is false.
-Read more about the syntax for the conditions on the [Symfony website](http://symfony.com/doc/current/components/expression_language/syntax.html).
-Examples :
-
-    #if{val == 5|the value equals 5}
-    #if{val == 5|the value equals 5|the value doesn't equal 5}
-    #if{val < 5 or val > 15|the value is lower that 5 or greater that 15|the value is between 5 and 15}
-    #if{(val > 5 and val < 15) or (val > 10 and val < 30)|then statement ...|else statement ...}
-
-### 'loop'
-
-Handle loop on a tag that contains an array of multiple data. Arguments list :
-
- - 1/ The tag that contains an array to loop on
- - 2/ Maximum number of items to loop on ('*' to loop on all elements)
- - 3/ Whether the items should be shuffled or not (true/false)
- - 4/ Separator between each item
- - 5/ Separator for the last item
- - 6/ The template for each item
-
-Example with the tag 'tag_name' that contains the array `[['name' => 'Bill'], ['name' => 'Bob'], ['name' => 'John']]`
-
-    Hello #loop{tag_name|*|true|, | and |dear @name}.
-    
-It will output : `Hello dear John, dear Bob and dear Bill.`
-
-### 'set'
-
-Set new tag within the template in order to be used further.
-
-Data :
-
-    [
-        [
-            'sex' => 'f',
-        ]
-    ]
-
-Template example :
-
-    #set{who|#if{sex == 'm'|boy|girl}};;
-    #set{hello|#random{Hello,Goodbye,Hi}};;
-    @hello @who
-
-Output example :
-
-    Hi girl
 
 ### 'choose'
 
