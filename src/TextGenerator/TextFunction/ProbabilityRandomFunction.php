@@ -57,6 +57,10 @@ class ProbabilityRandomFunction implements FunctionInterface
 
             $probability = (int) substr($argument, 0, strpos($argument, ':'));
 
+            if ($probability <= 0) {
+                continue;
+            }
+
             $value = '';
             if (strpos($argument, ':') + 1 < strlen($argument)) {
                 $value = substr($argument, strpos($argument, ':') + 1);
