@@ -3,7 +3,7 @@
 namespace Neveldo\TextGenerator\TextFunction;
 
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Neveldo\TextGenerator\ExpressionLanguage\ExpressionLanguage;
 
 /**
  * Class IfFunction
