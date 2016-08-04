@@ -11,6 +11,18 @@ class ChooseFunctionTest extends \PHPUnit_Framework_TestCase
         $this->function = new ChooseFunction($this->tagReplacer);
     }
 
+    public function testWithZeroArgument()
+    {
+        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->function->execute([]);
+    }
+
+    public function testWithOneArgument()
+    {
+        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->function->execute(['']);
+    }
+
     public function testSimpleChoose()
     {
         $result = $this->function->execute([2, 'test1','test2', 'test3']);

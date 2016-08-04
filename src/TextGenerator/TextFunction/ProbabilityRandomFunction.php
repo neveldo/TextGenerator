@@ -36,6 +36,12 @@ class ProbabilityRandomFunction implements FunctionInterface
      */
     public function execute(array $arguments)
     {
+        if (count($arguments) < 1) {
+            throw new \InvalidArgumentException(
+                sprintf("ProbabilityRandomFunction expect at least one parameter, %d given.", count($arguments))
+            );
+        }
+
         // Remove arguments that contain empty tags
         $arguments = array_filter($arguments, function($item) {
             return  (strpos($item, $this->tagReplacer->getEmptyTag()) === false);

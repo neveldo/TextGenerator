@@ -35,6 +35,12 @@ class ChooseFunction implements FunctionInterface
      */
     public function execute(array $arguments)
     {
+        if (count($arguments) < 2) {
+            throw new \InvalidArgumentException(
+                sprintf("ChooseFunction expect at least two parameters, %d given.", count($arguments))
+            );
+        }
+
         $index = (int) $arguments[0];
 
         if ($index !== 0

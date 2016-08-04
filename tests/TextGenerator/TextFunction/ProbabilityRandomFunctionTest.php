@@ -13,8 +13,8 @@ class ProbabilityRandomFunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testWithZeroArgument()
     {
-        $result = $this->function->execute([]);
-        $this->assertEquals('', $result);
+        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->function->execute([]);
     }
 
     public function testWithOneArgument()
@@ -33,6 +33,12 @@ class ProbabilityRandomFunctionTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->function->execute(['9:test1' . $this->tagReplacer->getEmptyTag(), '1:test2']);
         $this->assertEquals('test2', $result);
+    }
+
+    public function testWithStringThatContainsEmptyTag2()
+    {
+        $result = $this->function->execute(['9:test1' . $this->tagReplacer->getEmptyTag()]);
+        $this->assertEquals('', $result);
     }
 
     public function testWithWrongProbabilities()
