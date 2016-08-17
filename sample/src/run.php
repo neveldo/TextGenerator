@@ -4,6 +4,7 @@ if (!file_exists(__DIR__ . '/../../vendor/autoload.php')) {
     echo "Please run 'composer install' on the root directory before running the sample script.";
     return;
 }
+
 require __DIR__ . '/../../vendor/autoload.php';
 
 use Neveldo\TextGenerator\TextGenerator;
@@ -89,9 +90,9 @@ $data = [
     ],
 ];
 
-$tg = new TextGenerator();
-$tg->compile($template);
+$textGenerator = new TextGenerator();
+$textGenerator->compile($template);
 
-foreach($data as $actorData) {
-    echo $tg->generate($actorData) . "\n\n";
+foreach($data as $row) {
+    echo $textGenerator->generate($row) . "\n\n";
 }
