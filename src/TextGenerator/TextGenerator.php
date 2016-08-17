@@ -121,6 +121,9 @@ class TextGenerator
             }
         }
 
+        // Remove trailing 'empty' tags
+        $text = str_replace($this->tagReplacer->getEmptyTag(), '', $text);
+
         return $text;
     }
 
