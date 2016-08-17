@@ -96,8 +96,9 @@ Filter the arguments in order to ouput a result, here are some examples :
     #filter{number|@value} will output 564,564 (if @value = 564564)
     #filter{number|@value|0|,| } will output 564 564 (if @value = 564564)
 
-Available filters : round, ceil, floor, max, min, rand, number, lower, upper, lowerfirst, upperfirst, upperwords, trim, timestamp, date. For the filters
-Directly mapped to PHP functions, you can get more information into the PHP documentation for the arguments.
+Available filters : round, ceil, floor, max, min, rand, number, lower, upper, lowerfirst, upperfirst, upperwords, trim, timestamp, date. 
+For the filters directly mapped to PHP functions, you can get more information with the PHP documentation.
+Custom filters can easily be added through the FilterFunction::addFilter() method.
 
 ### 'loop'
 
