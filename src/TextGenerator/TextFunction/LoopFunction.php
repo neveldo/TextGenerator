@@ -39,10 +39,11 @@ class LoopFunction implements FunctionInterface
 
     /**
      * Handle Random function
-     * @param array $arguments
+     * @param array $arguments list of arguments where tags have been replaced by their values
+     * @param array $originalArguments list of original arguments
      * @return string
      */
-    public function execute(array $arguments)
+    public function execute(array $arguments, array $originalArguments)
     {
         if (count($arguments) !== 6) {
             throw new \InvalidArgumentException(
@@ -51,7 +52,7 @@ class LoopFunction implements FunctionInterface
         }
 
         // Parse argument 0 : the tag that contain the data to loop on
-        $loopData = $this->tagReplacer->getTag($arguments[0]);
+        $loopData = $this->tagReplacer->getTag($originalArguments[0]);
         if (!is_array($loopData)) {
             return '';
         }

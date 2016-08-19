@@ -57,8 +57,8 @@ Data :
 
 Template example :
 
-    #set{who|#if{sex == 'm'|boy|girl}};;
-    #set{hello|#random{Hello,Goodbye,Hi}};;
+    #set{@who|#if{sex == 'm'|boy|girl}};;
+    #set{@hello|#random{Hello,Goodbye,Hi}};;
     @hello @who
 
 Output example :
@@ -71,10 +71,10 @@ Display text depending on a condition. The first parameter is the condition to c
 Read more about the syntax for the conditions on the [Symfony website](http://symfony.com/doc/current/components/expression_language/syntax.html).
 Examples :
 
-    #if{val == 5|the value equals 5}
-    #if{val == 5|the value equals 5|the value doesn't equal 5}
-    #if{val < 5 or val > 15|the value is lower that 5 or greater that 15|the value is between 5 and 15}
-    #if{(val > 5 and val < 15) or (val > 10 and val < 30)|then statement ...|else statement ...}
+    #if{@val == 5|the value equals 5}
+    #if{@val == 5|the value equals 5|the value doesn't equal 5}
+    #if{@val < 5 or @val > 15|the value is lower that 5 or greater that 15|the value is between 5 and 15}
+    #if{(@val > 5 and @val < 15) or (@val > 10 and @val < 30)|then statement ...|else statement ...}
 
 ### 'expr'
 
@@ -113,7 +113,7 @@ Handle loop on a tag that contains an array of multiple data. Arguments list :
 
 Example with the tag 'tag_name' that contains the array `[['name' => 'Bill'], ['name' => 'Bob'], ['name' => 'John']]`
 
-    Hello #loop{tag_name|*|true|, | and |dear @name}.
+    Hello #loop{@tag_name|*|true|, | and |dear @name}.
     
 It will output : `Hello dear John, dear Bob and dear Bill.`
 
@@ -188,16 +188,16 @@ Output example :
 
 Template :
 
-    #set{pronoun|#if{sex == 'm'|He|She}};;
-    @firstname @lastname is an @nationality #if{sex == 'm'|actor|actress} of @age years old. ;;
+    #set{@pronoun|#if{@sex == 'm'|He|She}};;
+    @firstname @lastname is an @nationality #if{@sex == 'm'|actor|actress} of @age years old. ;;
     @pronoun was born in @birthdate in @birth_city (@birth_country). ;;
     #shuffle{ |;;
-        #random{Throughout|During|All along} #if{sex == 'm'|his|her} career, #random{@pronoun|@lastname} was nominated @nominations_number time#if{nominations_number     1|s} for the oscars and has won @awards_number time#if{awards_number > 1|s}.|;;
-        #if{awards_number > 1 and (awards_number / nominations_number) >= 0.5|@lastname is accustomed to win oscars.}|;;
-        @firstname @lastname first movie, "@first_movie_name", was shot in @first_movie_year.|;;
-        One of #if{sex == 'm'|his|her} most #random{famous|important|major} #random{film|movie} is @famous_movie_name and has been released in @famous_movie_year. ;;
-            #prandom{20:|80:Indeed, }@famous_movie_name #random{earned|gained|made|obtained} @famous_movie_earn #random{worldwide|#random{across|around} the world}. ;;
-            #loop{other_famous_movies|*|true|, | and |@name (@year)} are some other great movies from @lastname.;;
+        #random{Throughout|During|All along} #if{sex == 'm'|his|her} career, #random{@pronoun|@lastname} was nominated @nominations_number time#if{@nominations_number > 1|s} for the oscars and has won @awards_number time#if{@awards_number > 1|s}.|;;
+        #if{@awards_number > 1 and (@awards_number / @nominations_number) >= 0.5|@lastname is accustomed to win oscars.}|;;
+        @firstname @lastname first movie, "@first_movie_name", was shot in @first_movie_year (at #expr{@age - (#filter{timestamp|Y} - @first_movie_year)} years old).|;;
+        One of #if{@sex == 'm'|his|her} most #random{famous|important|major} #random{film|movie} is @famous_movie_name and has been released in @famous_movie_year. ;;
+            #prandom{20:|80:Indeed, }@famous_movie_name #random{earned|gained|made|obtained} $#filter{number|@famous_movie_earn} #random{worldwide|#random{across|around} the world}. ;;
+            #loop{@other_famous_movies|*|true|, | and |@name (@year)} are some other great movies from @lastname.;;
     }
 
 Data :

@@ -14,36 +14,36 @@ class IfFunctionTest extends \PHPUnit_Framework_TestCase
     public function testWithZeroArgument()
     {
         $this->setExpectedException(\InvalidArgumentException::class);
-        $this->function->execute([]);
+        $this->function->execute([], []);
     }
 
     public function testWithOneArgument()
     {
         $this->setExpectedException(\InvalidArgumentException::class);
-        $this->function->execute(['']);
+        $this->function->execute([''], ['']);
     }
 
     public function testConditionTrue()
     {
-        $result = $this->function->execute(['2 > 1', 'ok', 'notok']);
+        $result = $this->function->execute(['2 > 1', 'ok', 'notok'], ['2 > 1', 'ok', 'notok']);
         $this->assertEquals('ok', $result);
     }
 
     public function testConditionFalse()
     {
-        $result = $this->function->execute(['2 < 1', 'ok', 'notok']);
+        $result = $this->function->execute(['2 < 1', 'ok', 'notok'], ['2 < 1', 'ok', 'notok']);
         $this->assertEquals('notok', $result);
     }
 
     public function testConditionTrueWithNoElse()
     {
-        $result = $this->function->execute(['2 > 1', 'ok']);
+        $result = $this->function->execute(['2 > 1', 'ok'], ['2 > 1', 'ok']);
         $this->assertEquals('ok', $result);
     }
 
     public function testConditionFalseWithNoElse()
     {
-        $result = $this->function->execute(['2 < 1', 'ok']);
+        $result = $this->function->execute(['2 < 1', 'ok'], ['2 < 1', 'ok']);
         $this->assertEquals('', $result);
     }
 }

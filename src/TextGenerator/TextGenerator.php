@@ -87,8 +87,7 @@ class TextGenerator
 
         $this->tagReplacer->setTags($data);
 
-        // Replace the tags by the proper values first
-        $text = $this->tagReplacer->replace($this->compiledTemplate);
+        $text = $this->compiledTemplate;
 
         // Execute the functions stack starting with the deepest functions and ending
         // with the shallowest ones
@@ -104,12 +103,13 @@ class TextGenerator
                 $openingTagLastPos,
                 strpos($text, $closingTag) - $openingTagLastPos
             );
-            $arguments = explode('|', $arguments);
+            $parsedArguments = explode('|', $this->tagReplacer->replace($arguments));
+            $originalArguments = explode('|', $arguments);
 
             // Replace the function call in the template by the returned value
             $text = substr_replace(
                 $text,
-                $this->getFunction($statement['function'])->execute($arguments),
+                $this->getFunction($statement['function'])->execute($parsedArguments, $originalArguments),
                 strpos($text, $openingTag),
                 strpos($text, $closingTag) + strlen($closingTag) - strpos($text, $openingTag)
             );
@@ -117,9 +117,12 @@ class TextGenerator
             if ($statement['function'] === 'set') {
                 // After a tag affectation, parse this tag in all the text in order to replace
                 // Them with the proper value
-                $text = $this->tagReplacer->replaceOne($text, $arguments[0]);
+                $text = $this->tagReplacer->replaceOne($text, $parsedArguments[0]);
             }
         }
+
+        // Replace the remaining tags by the proper values
+        $text = $this->tagReplacer->replace($text);
 
         // Remove trailing 'empty' tags
         $text = str_replace($this->tagReplacer->getEmptyTag(), '', $text);

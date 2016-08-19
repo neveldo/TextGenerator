@@ -30,10 +30,10 @@ class SetFunction implements FunctionInterface
 
     /**
      * Handle set function
-     * @param array $arguments
-     * @return string
+     * @param array $arguments list of arguments where tags have been replaced by their values
+     * @param array $originalArguments list of original arguments
      */
-    public function execute(array $arguments)
+    public function execute(array $arguments, array $originalArguments)
     {
         if (count($arguments) !== 2) {
             throw new \InvalidArgumentException(
@@ -41,7 +41,7 @@ class SetFunction implements FunctionInterface
             );
         }
 
-        $this->tagReplacer->addTag($arguments[0], $arguments[1]);
+        $this->tagReplacer->addTag(substr($arguments[0], 1), $arguments[1]);
 
         return '';
     }

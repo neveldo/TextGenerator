@@ -30,10 +30,11 @@ class ChooseFunction implements FunctionInterface
 
     /**
      * Handle choose function
-     * @param array $arguments
+     * @param array $arguments list of arguments where tags have been replaced by their values
+     * @param array $originalArguments list of original arguments
      * @return string
      */
-    public function execute(array $arguments)
+    public function execute(array $arguments, array $originalArguments)
     {
         if (count($arguments) < 2) {
             throw new \InvalidArgumentException(

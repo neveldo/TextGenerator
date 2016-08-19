@@ -25,7 +25,7 @@ class TextGeneratorTest extends \PHPUnit_Framework_TestCase
             'firstname' => 'John',
             'lastname' => '',
         ]);
-        $this->assertEquals('Hello John ' . $this->textGenerator->getTagReplacer()->getEmptyTag() . '.', $result);
+        $this->assertEquals('Hello John .', $result);
     }
 
     public function testRandom()
@@ -65,27 +65,27 @@ class TextGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testIf()
     {
-        $this->textGenerator->compile("#if{sex == 'm'|actor|actress}");
+        $this->textGenerator->compile("#if{@sex == 'm'|actor|actress}");
         $result = $this->textGenerator->generate(['sex' => 'm']);
         $this->assertEquals($result, 'actor');
     }
 
     public function testElse()
     {
-        $this->textGenerator->compile("#if{sex == 'm'|actor|actress}");
+        $this->textGenerator->compile("#if{@sex == 'm'|actor|actress}");
         $result = $this->textGenerator->generate(['sex' => 'f']);
         $this->assertEquals($result, 'actress');
     }
 
     public function testElseWithNoElse() {
-        $this->textGenerator->compile("#if{sex == 'm'|actor}");
+        $this->textGenerator->compile("#if{@sex == 'm'|actor}");
         $result = $this->textGenerator->generate(['sex' => 'f']);
         $this->assertEquals($result, '');
     }
 
     public function testLoopWithThreeElements()
     {
-        $this->textGenerator->compile("#loop{loop_tag|*|false|, | and |@var1 - @var2}");
+        $this->textGenerator->compile("#loop{@loop_tag|*|false|, | and |@var1 - @var2}");
         $result = $this->textGenerator->generate([
             'loop_tag' => [
                 [
@@ -102,12 +102,13 @@ class TextGeneratorTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ]);
+
         $this->assertEquals($result, 'test1 - test2, test21 - test22 and test31 - test32');
     }
 
     public function testRandomLoopWithTwoElements()
     {
-        $this->textGenerator->compile("#loop{loop_tag|*|true|, | and |@var1 - @var2}");
+        $this->textGenerator->compile("#loop{@loop_tag|*|true|, | and |@var1 - @var2}");
         $result = $this->textGenerator->generate([
             'loop_tag' => [
                 [

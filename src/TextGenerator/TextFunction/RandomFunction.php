@@ -30,10 +30,10 @@ class RandomFunction implements FunctionInterface
 
     /**
      * Handle Random function
-     * @param array $arguments
-     * @return string
+     * @param array $arguments list of arguments where tags have been replaced by their values
+     * @param array $originalArguments list of original arguments
      */
-    public function execute(array $arguments)
+    public function execute(array $arguments, array $originalArguments)
     {
         // Remove arguments that contain empty tags
         $arguments = array_filter($arguments, function($item) {

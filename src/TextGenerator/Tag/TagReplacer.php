@@ -10,7 +10,7 @@ namespace Neveldo\TextGenerator\Tag;
 class TagReplacer implements TagReplacerInterface
 {
     /**
-     * @const string the tag
+     * @const string the empty tag
      */
     const EMPTY_TAG = '[EMPTY]';
 
@@ -24,6 +24,12 @@ class TagReplacer implements TagReplacerInterface
      * format : ['@tag_name' => 'value', ...]
      */
     private $escapedTags = [];
+
+    /**
+     * @var array reversed tags to use for text replacement
+     * format : ['@tag_name' => 'tag_name', ...]
+     */
+    private $sanitizedTagNames = [];
 
     /**
      * Initialize the tags list
@@ -46,6 +52,7 @@ class TagReplacer implements TagReplacerInterface
     public function addTag($name, $value)
     {
         $this->tags[$name] = $value;
+        $this->sanitizedTagNames['@' . $name] = $name;
 
         // Replace empty values by [EMPTY_TAG] in order to be able to remove easily
         // the parts that contains this tag later to avoid inconsistent sentences
@@ -69,27 +76,37 @@ class TagReplacer implements TagReplacerInterface
     }
 
     /**
+     * Replace tags by the matching sanitized tag names
+     * @param string $content
+     * @return string
+     */
+    public function sanitizeTagNames($content)
+    {
+        return strtr($content, $this->sanitizedTagNames);
+    }
+
+    /**
      * Replace the tag $tagName by the matching value within the content
      * @param string $content
-     * @param string $tagName
+     * @param string $tagName, ex : '@tag_name'
      * @return string
      */
     public function replaceOne($content, $tagName)
     {
-        $escapedTag = '@' . $tagName;
-        if (isset($this->escapedTags[$escapedTag])) {
-            return str_replace($escapedTag, $this->escapedTags[$escapedTag], $content);
+        if (isset($this->escapedTags[$tagName])) {
+            return str_replace($tagName, $this->escapedTags[$tagName], $content);
         }
         return $content;
     }
 
     /**
      * Return a tag by its name
-     * @param $name
+     * @param $name ex : '@tag_name'
      * @return string|array
      */
     public function getTag($name)
     {
+        $name = substr($name, 1);
         if (isset($this->tags[$name])) {
             return $this->tags[$name];
         }

@@ -30,6 +30,13 @@ interface TagReplacerInterface
     public function replace($content);
 
     /**
+     * Replace tags by the matching sanitized tag names
+     * @param string $content
+     * @return string
+     */
+    public function sanitizeTagNames($content);
+
+    /**
      * Replace the tag $tagName by the matching value within the content
      * @param string $content
      * @param string $tagName

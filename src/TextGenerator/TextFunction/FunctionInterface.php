@@ -14,5 +14,5 @@ interface FunctionInterface
      * @param array $arguments
      * @return string
      */
-    public function execute(array $arguments);
+    public function execute(array $arguments, array $originalArguments);
 }

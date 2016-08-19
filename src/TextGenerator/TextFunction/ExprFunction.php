@@ -30,11 +30,12 @@ class ExprFunction implements FunctionInterface
 
     /**
      * Handle Expr function
-     * @param array $arguments
+     * @param array $arguments list of arguments where tags have been replaced by their values
+     * @param array $originalArguments list of original arguments
      * @return string
      * @throw InvalidArgumentException if the number of arguments is not valid
      */
-    public function execute(array $arguments)
+    public function execute(array $arguments, array $originalArguments)
     {
         if (count($arguments) !== 1) {
             throw new \InvalidArgumentException(
@@ -42,7 +43,7 @@ class ExprFunction implements FunctionInterface
             );
         }
 
-        return (new ExpressionLanguage())->evaluate($arguments[0], $this->tagReplacer->getTags());
+        return (new ExpressionLanguage())->evaluate($this->tagReplacer->sanitizeTagNames($originalArguments[0]), $this->tagReplacer->getTags());
     }
 
 }
