@@ -3,6 +3,7 @@ Change log for TextGenerator
 
 ## x.x.x
 - Add 'substring' filter to FilterFunction
+- Fix error when a filter doesn't exist
 
 ## 0.3.0 - September 05, 2016
 

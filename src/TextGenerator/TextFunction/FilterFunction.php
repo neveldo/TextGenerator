@@ -141,7 +141,7 @@ class FilterFunction implements FunctionInterface
 
         if (!isset($this->availableFilters[$arguments[0]])) {
             throw new \InvalidArgumentException(
-                sprintf("The filter %d is not available.", $arguments[0])
+                sprintf("The filter %s is not available.", $arguments[0])
             );
         }
 
