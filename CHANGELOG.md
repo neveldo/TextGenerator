@@ -4,6 +4,7 @@ Change log for TextGenerator
 ## x.x.x
 - Add 'substring' filter to FilterFunction
 - Fix error when a filter doesn't exist
+- Fix set function when the variable name contains another existing variable name
 
 ## 0.3.0 - September 05, 2016
 
