@@ -116,6 +116,12 @@ class FilterFunction implements FunctionInterface
             'date' => [
                 'function' => function($date, $fromFormat, $toFormat) {
                     $datetime = \DateTime::createFromFormat($fromFormat, $date);
+
+                    if ($datetime === false) {
+                        throw new \InvalidArgumentException(
+                            sprintf("Wrong date format %s for the date %s.", $fromFormat, $date)
+                        );
+                    }
                     return $datetime->format($toFormat);
                 },
                 'minArgs' => 3,
