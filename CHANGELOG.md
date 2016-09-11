@@ -1,6 +1,9 @@
 # ChangeLog
 Change log for TextGenerator
 
+## x.x.x
+- Add 'substring' filter to FilterFunction
+
 ## 0.3.0 - September 05, 2016
 
 - Add new #choose{} function
