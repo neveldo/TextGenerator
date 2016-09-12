@@ -33,14 +33,14 @@ class SetFunctionTest extends \PHPUnit_Framework_TestCase
     {
         $this->textGenerator->compile("#set{@test|Lorem2}@test");
         $result = $this->textGenerator->generate(['test' => 'Lorem1']);
-        $this->assertEquals('Lorem1', $result);
+        $this->assertEquals('Lorem2', $result);
     }
 
     public function testTagOverwritting2()
     {
         $this->textGenerator->compile("#set{@test|Lorem2}#set{@test|Lorem3}@test");
         $result = $this->textGenerator->generate([]);
-        $this->assertEquals('Lorem2', $result);
+        $this->assertEquals('Lorem3', $result);
     }
 
     public function testAssignementWithFunctionCall()

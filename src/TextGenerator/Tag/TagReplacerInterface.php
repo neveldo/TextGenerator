@@ -37,14 +37,6 @@ interface TagReplacerInterface
     public function sanitizeTagNames($content);
 
     /**
-     * Replace the tag $tagName by the matching value within the content
-     * @param string $content
-     * @param string $tagName
-     * @return string
-     */
-    public function replaceOne($content, $tagName);
-
-    /**
      * Return a tag by its name
      * @param $name
      * @return string|array

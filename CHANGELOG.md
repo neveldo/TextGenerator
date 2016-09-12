@@ -1,7 +1,8 @@
 # ChangeLog
 Change log for TextGenerator
 
-## x.x.x
+## 0.4.0 - September 12, 2016
+- Sort the function calls tree from left to right and from bottom to up
 - Add 'substring' filter to FilterFunction
 - Fix error when a filter doesn't exist
 - Fix set function when the variable name contains another existing variable name

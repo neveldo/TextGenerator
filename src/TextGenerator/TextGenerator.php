@@ -48,6 +48,17 @@ class TextGenerator
     private $statementsStack = [];
 
     /**
+     * @var array sorted execution stack to run for generating a text
+     */
+    private $sortedStatementsStack = [];
+
+
+    /**
+     * @var int execution stack size
+     */
+    private $executionStackSize = 0;
+
+    /**
      * TextGenerator constructor.
      * @param TagReplacerInterface|null $tagReplacer
      */
@@ -91,7 +102,7 @@ class TextGenerator
 
         // Execute the functions stack starting with the deepest functions and ending
         // with the shallowest ones
-        foreach($this->statementsStack as $statement) {
+        foreach($this->sortedStatementsStack as $statement) {
 
             $openingTag = '[' . $statement['id'] . ']';
             $closingTag =  '[/' . $statement['id'] . ']';
@@ -113,12 +124,6 @@ class TextGenerator
                 strpos($text, $openingTag),
                 strpos($text, $closingTag) + strlen($closingTag) - strpos($text, $openingTag)
             );
-
-            if ($statement['function'] === 'set') {
-                // After a tag affectation, parse this tag in all the text in order to replace
-                // Them with the proper value
-                $text = $this->tagReplacer->replaceOne($text, $parsedArguments[0]);
-            }
         }
 
         // Replace the remaining tags by the proper values
@@ -143,22 +148,26 @@ class TextGenerator
 
         $this->compiledTemplate = $this->parseIndentations($template);
         $this->compiledTemplate = $this->compileTemplate($this->compiledTemplate);
-
-        // Sort the execution stack in order to execute the deepest
-        // functions first and end with the shallowest ones but preserving the order of
-        // calls that have the same depth level
-        uasort(
-            $this->statementsStack,
-            function($a, $b) {
-                if ($b['depth'] - $a['depth'] !== 0) {
-                    return $b['depth'] - $a['depth'];
-                } else {
-                    return $a['id'] - $b['id'];
-                }
-            }
-        );
+        $this->sortStatements();
 
         return $this;
+    }
+
+    /**
+     * Sort the function calls tree from left to right and from bottom to up
+     * @param $parent null|int parent statement ID
+     */
+    public function sortStatements($parent = null)
+    {
+        foreach($this->statementsStack as $id => $options) {
+            if ($options['parent'] === $parent) {
+                $this->sortStatements($id);
+            }
+        }
+
+        if ($parent !== null) {
+            $this->sortedStatementsStack[] = $this->statementsStack[$parent];
+        }
     }
 
     /**
@@ -175,48 +184,38 @@ class TextGenerator
     /**
      * Parse recursively the template to extract the execution stack
      * @param string $template
+     * @param int|null $parent parent function ID
      * @return string $template
      * @throw \InvalidArgumentException if the template contains unknown functions
      */
-    protected function compileTemplate($template) {
+    protected function compileTemplate($template, $parent = null) {
+        if (is_array($template)) {
 
-        $replacements = -1;
-        $depth = 0;
-        $statementsStackSize = 0;
-        while($replacements !== 0) {
-            $template = preg_replace_callback(
-                '/(#[a-z_]+\{(?:[^\{\}]|(?R))+\})/s',
-                function($template) use ($depth, &$statementsStackSize) {
-                    // $template = '#fct{...}'
-                    $template = $template[1];
+            // $template = '#fct{...}'
+            $template = $template[1];
 
-                    // Add the function call into the execution stack
-                    $functionName = substr($template, 1, strpos($template, '{') - 1);
-                    if (!in_array($functionName, array_keys($this->functions))) {
-                        throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $functionName));
-                    }
-                    $this->statementsStack[$statementsStackSize] = [
-                        'id' => $statementsStackSize,
-                        'function' => $functionName,
-                        'depth' => $depth
-                    ];
+            // Add the function call into the execution stack
+            $functionName = substr($template, 1, strpos($template, '{') - 1);
+            if (!in_array($functionName, array_keys($this->functions))) {
+                throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $functionName));
+            }
+            $this->statementsStack[] = ['id' => $this->executionStackSize, 'function' => $functionName, 'parent' => $parent];
 
-                    // Update the template to replace function calls by references to the execution stack like : [9]...[/9]
-                    $template = substr_replace($template, '[' . $statementsStackSize . ']', 0, strpos($template, '{') + 1);
-                    $template = substr_replace($template, '[/' . $statementsStackSize . ']', strlen($template) - 1);
+            // Update the template to replace function calls by references to the execution stack like : [9]...[/9]
+            $template = substr_replace($template, '[' . $this->executionStackSize . ']', 0, strpos($template, '{') + 1);
+            $template = substr_replace($template, '[/' . $this->executionStackSize . ']', strlen($template) - 1);
+            $parent = $this->executionStackSize;
 
-                    ++$statementsStackSize;
-
-                    return $template;
-                },
-                $template,
-                -1,
-                $replacements
-            );
-
-            ++$depth;
+            ++$this->executionStackSize;
         }
-        return $template;
+
+        return preg_replace_callback(
+            '/(#[a-z_]+\{(?:[^\{\}]|(?R))+\})/s',
+            function($template) use($parent) {
+                return $this->compileTemplate($template, $parent);
+            },
+            $template
+        );
     }
 
     /**

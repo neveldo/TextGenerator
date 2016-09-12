@@ -86,20 +86,6 @@ class TagReplacer implements TagReplacerInterface
     }
 
     /**
-     * Replace the tag $tagName by the matching value within the content
-     * @param string $content
-     * @param string $tagName, ex : '@tag_name'
-     * @return string
-     */
-    public function replaceOne($content, $tagName)
-    {
-        if (isset($this->escapedTags[$tagName])) {
-            return str_replace($tagName, $this->escapedTags[$tagName], $content);
-        }
-        return $content;
-    }
-
-    /**
      * Return a tag by its name
      * @param $name ex : '@tag_name'
      * @return string|array
