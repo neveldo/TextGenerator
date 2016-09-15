@@ -2,7 +2,7 @@
 
 TextGenerator is a PHP package that aims to generate automated texts  from data. Feel free to comment and contribute.
 
-Aside from the PHP package, A [Google Spreadsheet Add-on](https://chrome.google.com/webstore/detail/textgenerator/lbcccnholajhofhlfhkmjjekklkhhjnf) is available on the Chrome webstore. It gives users the ability to produce automated text contents from data directly within Google Spreadsheet.
+Aside from the PHP package, A [Google Spreadsheet Add-on](https://chrome.google.com/webstore/detail/textgenerator/lbcccnholajhofhlfhkmjjekklkhhjnf) is available on the Chrome webstore. It gives users the ability to produce automated text contents from data directly within Google Spreadsheet. A complete tutorial for the Spreadsheet Add-on is available [here](https://medium.com/@neveldo/tutorial-turn-your-data-into-narratives-using-textgenerator-wikidata-and-google-spreadsheet-b85fad31219a#.w8mi43qwh).
 
 ## Features
 
