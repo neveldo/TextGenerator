@@ -141,4 +141,17 @@ class TextGeneratorTest extends \PHPUnit_Framework_TestCase
         $result = $this->textGenerator->generate([]);
         $this->assertEquals('Test1 Test2 Test3Test4', $result);
     }
+
+    public function testCoalesce()
+    {
+        $this->textGenerator->compile("#coalesce{@my_tag1|@my_tag2|@my_tag3|@my_tag4}");
+        $result = $this->textGenerator->generate([
+            'my_tag1' => '',
+            'my_tag2' => null,
+            'my_tag3' => 'Hello',
+            'my_tag4' => 'Hi',
+        ]);
+        $this->assertEquals($result, 'Hello');
+    }
+
 }
