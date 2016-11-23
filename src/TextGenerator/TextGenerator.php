@@ -3,6 +3,7 @@
 namespace Neveldo\TextGenerator;
 
 use Neveldo\TextGenerator\TextFunction\ChooseFunction;
+use Neveldo\TextGenerator\TextFunction\CoalesceFunction;
 use Neveldo\TextGenerator\TextFunction\ExprFunction;
 use Neveldo\TextGenerator\TextFunction\FilterFunction;
 use Neveldo\TextGenerator\TextFunction\FunctionInterface;
@@ -81,6 +82,7 @@ class TextGenerator
             ->registerFunction('choose', new ChooseFunction($this->tagReplacer))
             ->registerFunction('expr', new ExprFunction($this->tagReplacer))
             ->registerFunction('filter', new FilterFunction($this->tagReplacer))
+            ->registerFunction('coalesce', new CoalesceFunction($this->tagReplacer))
         ;
     }
 
