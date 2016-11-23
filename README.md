@@ -60,7 +60,7 @@ Data :
 Template example :
 
     #set{@who|#if{sex == 'm'|boy|girl}};;
-    #set{@hello|#random{Hello,Goodbye,Hi}};;
+    #set{@hello|#random{Hello|Goodbye|Hi}};;
     @hello @who
 
 Output example :
@@ -179,12 +179,35 @@ For instance, 'choose' function can be used in combination with 'set' function :
 
 Template example :
 
-    #set{my_choice|#random{1,2,3}};;
+    #set{my_choice|#random{1|2|3}};;
     Lorem #choose{@my_choice|one|two|three} ipsum #choose{@my_choice|first|second|third}
 
 Output example :
 
     Lorem two ipsum second
+
+### 'coalesce'
+
+Returns the first non empty value.
+
+Data :
+
+    [
+        [
+            'my_tag1' => '',
+            'my_tag2' => null,
+            'my_tag3' => 'Hello',
+            'my_tag4' => 'Hi',
+        ]
+    ]
+
+Template example :
+
+    #coalesce{@my_tag1|@my_tag2|@my_tag3|@my_tag4}
+
+Output example :
+
+    Hello
 
 ## Complete example :
 
