@@ -31,7 +31,7 @@ require __DIR__ . '/../../vendor/autoload.php';
 use Neveldo\TextGenerator\TextGenerator;
 
 $output = [
-    'result' => '',
+    'result' => [],
     'error' => '',
 ];
 
