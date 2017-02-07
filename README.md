@@ -137,7 +137,7 @@ Return randomly one of the arguments, taking account of the probability set to e
 
 Template example :
 
-    #random{80:first option|10:second option|10:third option}
+    #prandom{80:first option|10:second option|10:third option}
 
 Output example :
 
