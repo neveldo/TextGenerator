@@ -92,7 +92,7 @@ class TagReplacer implements TagReplacerInterface
      */
     public function getTag($name)
     {
-        $name = substr($name, 1);
+        $name = mb_substr($name, 1);
         if (isset($this->tags[$name])) {
             return $this->tags[$name];
         }

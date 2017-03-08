@@ -45,7 +45,7 @@ class ProbabilityRandomFunction implements FunctionInterface
 
         // Remove arguments that contain empty tags
         $arguments = array_filter($arguments, function($item) {
-            return  (strpos($item, $this->tagReplacer->getEmptyTag()) === false);
+            return  (mb_strpos($item, $this->tagReplacer->getEmptyTag()) === false);
         });
 
         if (count($arguments) === 0) {
@@ -58,19 +58,19 @@ class ProbabilityRandomFunction implements FunctionInterface
 
         foreach($arguments as $argument) {
 
-            if (strpos($argument, ':') === false) {
+            if (mb_strpos($argument, ':') === false) {
                 continue;
             }
 
-            $probability = (int) substr($argument, 0, strpos($argument, ':'));
+            $probability = (int) mb_substr($argument, 0, mb_strpos($argument, ':'));
 
             if ($probability <= 0) {
                 continue;
             }
 
             $value = '';
-            if (strpos($argument, ':') + 1 < strlen($argument)) {
-                $value = substr($argument, strpos($argument, ':') + 1);
+            if (mb_strpos($argument, ':') + 1 < mb_strlen($argument)) {
+                $value = mb_substr($argument, mb_strpos($argument, ':') + 1);
             }
 
             $options[$optionId] = [

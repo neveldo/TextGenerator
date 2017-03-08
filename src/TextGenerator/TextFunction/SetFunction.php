@@ -41,7 +41,7 @@ class SetFunction implements FunctionInterface
             );
         }
 
-        $this->tagReplacer->addTag(substr($originalArguments[0], 1), $arguments[1]);
+        $this->tagReplacer->addTag(mb_substr($originalArguments[0], 1), $arguments[1]);
 
         return '';
     }

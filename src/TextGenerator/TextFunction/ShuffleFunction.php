@@ -49,7 +49,7 @@ class ShuffleFunction implements FunctionInterface
 
         // Remove empty arguments and arguments that contain empty tags
         $arguments = array_filter($arguments, function($item) {
-           return  ($item !== '' && strpos($item, $this->tagReplacer->getEmptyTag()) === false);
+           return  ($item !== '' && mb_strpos($item, $this->tagReplacer->getEmptyTag()) === false);
         });
 
         shuffle($arguments);

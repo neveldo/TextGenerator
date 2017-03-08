@@ -108,23 +108,23 @@ class TextGenerator
 
             $openingTag = '[' . $statement['id'] . ']';
             $closingTag =  '[/' . $statement['id'] . ']';
-            $openingTagLastPos = strpos($text, $openingTag) + strlen($openingTag);
+            $openingTagLastPos = mb_strpos($text, $openingTag) + mb_strlen($openingTag);
 
             // Extract the argument list  of the function
-            $arguments = substr(
+            $arguments = mb_substr(
                 $text,
                 $openingTagLastPos,
-                strpos($text, $closingTag) - $openingTagLastPos
+                mb_strpos($text, $closingTag) - $openingTagLastPos
             );
             $parsedArguments = explode('|', $this->tagReplacer->replace($arguments));
             $originalArguments = explode('|', $arguments);
 
             // Replace the function call in the template by the returned value
-            $text = substr_replace(
+            $text = $this->substringReplace(
                 $text,
                 $this->getFunction($statement['function'])->execute($parsedArguments, $originalArguments),
-                strpos($text, $openingTag),
-                strpos($text, $closingTag) + strlen($closingTag) - strpos($text, $openingTag)
+                mb_strpos($text, $openingTag),
+                mb_strpos($text, $closingTag) + mb_strlen($closingTag) - mb_strpos($text, $openingTag)
             );
         }
 
@@ -135,6 +135,20 @@ class TextGenerator
         $text = str_replace($this->tagReplacer->getEmptyTag(), '', $text);
 
         return $text;
+    }
+
+    /**
+     * substr_replace that works with multibytes strings
+     * @see http://php.net/manual/en/function.substr-replace.php
+     * @param $str
+     * @param $replacement
+     * @param $start
+     * @param $length
+     * @return string
+     */
+    protected function substringReplace($str, $replacement, $start, $length)
+    {
+        return mb_substr($str, 0, $start) . $replacement . mb_substr($str, $start + $length);
     }
 
     /**
@@ -197,15 +211,15 @@ class TextGenerator
             $template = $template[1];
 
             // Add the function call into the execution stack
-            $functionName = substr($template, 1, strpos($template, '{') - 1);
+            $functionName = mb_substr($template, 1, mb_strpos($template, '{') - 1);
             if (!in_array($functionName, array_keys($this->functions))) {
                 throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $functionName));
             }
             $this->statementsStack[] = ['id' => $this->executionStackSize, 'function' => $functionName, 'parent' => $parent];
 
             // Update the template to replace function calls by references to the execution stack like : [9]...[/9]
-            $template = substr_replace($template, '[' . $this->executionStackSize . ']', 0, strpos($template, '{') + 1);
-            $template = substr_replace($template, '[/' . $this->executionStackSize . ']', strlen($template) - 1);
+            $template = $this->substringReplace($template, '[' . $this->executionStackSize . ']', 0, mb_strpos($template, '{') + 1);
+            $template = $this->substringReplace($template, '[/' . $this->executionStackSize . ']', mb_strlen($template) - 1, 1);
             $parent = $this->executionStackSize;
 
             ++$this->executionStackSize;

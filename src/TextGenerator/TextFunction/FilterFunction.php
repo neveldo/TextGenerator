@@ -67,27 +67,33 @@ class FilterFunction implements FunctionInterface
             ],
 
             'lower' => [
-                'function' => 'strtolower',
+                'function' => 'mb_strtolower',
                 'minArgs' => 1,
                 'maxArgs' => 1
             ],
             'upper' => [
-                'function' => 'strtoupper',
+                'function' => 'mb_strtoupper',
                 'minArgs' => 1,
                 'maxArgs' => 1
             ],
             'lowerfirst' => [
-                'function' => 'lcfirst',
+                'function' => function($value) {
+                    return mb_strtolower(mb_substr($value, 0, 1)) . mb_substr($value, 1, mb_strlen($value) - 1);
+                },
                 'minArgs' => 1,
                 'maxArgs' => 1
             ],
             'upperfirst' => [
-                'function' => 'ucfirst',
+                'function' => function($value) {
+                    return mb_strtoupper(mb_substr($value, 0, 1)) . mb_substr($value, 1, mb_strlen($value) - 1);
+                },
                 'minArgs' => 1,
                 'maxArgs' => 1
             ],
             'upperwords' => [
-                'function' => 'ucwords',
+                'function' => function($value) {
+                    return mb_convert_case($value, MB_CASE_TITLE);
+                },
                 'minArgs' => 1,
                 'maxArgs' => 1
             ],
@@ -97,7 +103,7 @@ class FilterFunction implements FunctionInterface
                 'maxArgs' => 1
             ],
             'substring' => [
-                'function' => 'substr',
+                'function' => 'mb_substr',
                 'minArgs' => 2,
                 'maxArgs' => 3
             ],

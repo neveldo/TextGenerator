@@ -46,7 +46,7 @@ class ChooseFunction implements FunctionInterface
 
         if ($index !== 0
             && isset($arguments[$index])
-            && (strpos($arguments[$index], $this->tagReplacer->getEmptyTag()) === false)
+            && (mb_strpos($arguments[$index], $this->tagReplacer->getEmptyTag()) === false)
         ) {
             return $arguments[$index];
         }

@@ -66,7 +66,7 @@ class LoopFunction implements FunctionInterface
 
         // Remove empty strings and arguments that contain empty tags
         $loopStrings = array_filter($loopStrings, function($item) {
-            return  ($item !== '' && strpos($item, $this->tagReplacer->getEmptyTag()) === false);
+            return  ($item !== '' && mb_strpos($item, $this->tagReplacer->getEmptyTag()) === false);
         });
 
         // Parse argument 1 : number of items to loop on ('*' to loop on all elements)
