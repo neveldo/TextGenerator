@@ -1,6 +1,11 @@
 # ChangeLog
 Change log for TextGenerator
 
+## 1.0.0 - March 8, 2017
+- Add coalesce function
+- Handle properly UTF-8 characters
+- Remove whitespaces around variable name in set function
+
 ## 0.4.0 - September 12, 2016
 - Sort the function calls tree from left to right and from bottom to up
 - Add 'substring' filter to FilterFunction
