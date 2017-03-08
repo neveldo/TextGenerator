@@ -59,13 +59,14 @@ Data :
 
 Template example :
 
+    #set{@intro|how are you ?};;
     #set{@who|#if{sex == 'm'|boy|girl}};;
     #set{@hello|#random{Hello|Goodbye|Hi}};;
-    @hello @who
+    @hello @who @intro
 
 Output example :
 
-    Hi girl
+    Hi girl how are you ?
 
 ### 'if'
 
