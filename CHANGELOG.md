@@ -1,6 +1,9 @@
 # ChangeLog
 Change log for TextGenerator
 
+## 1.0.1 - March 13, 2017
+- Allow to load dependency expression-language 2.x or 3.x
+
 ## 1.0.0 - March 8, 2017
 - Add coalesce function
 - Handle properly UTF-8 characters
