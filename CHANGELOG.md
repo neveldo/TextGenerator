@@ -1,6 +1,9 @@
 # ChangeLog
 Change log for TextGenerator
 
+## 1.0.2 - March 14, 2017
+- Add u modifier to preg_replace_callback() call
+
 ## 1.0.1 - March 13, 2017
 - Allow to load dependency expression-language 2.x or 3.x
 
