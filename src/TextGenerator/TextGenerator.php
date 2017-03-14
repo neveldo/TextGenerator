@@ -226,7 +226,7 @@ class TextGenerator
         }
 
         return preg_replace_callback(
-            '/(#[a-z_]+\{(?:[^\{\}]|(?R))+\})/s',
+            '/(#[a-z_]+\{(?:[^\{\}]|(?R))+\})/us',
             function($template) use($parent) {
                 return $this->compileTemplate($template, $parent);
             },
