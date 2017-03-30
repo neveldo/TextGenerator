@@ -61,7 +61,14 @@ class FilterFunction implements FunctionInterface
                 'maxArgs' => 2
             ],
             'number' => [
-                'function' => 'number_format',
+                'function' => function($value, $decimals = 0, $decPoint = '.', $thousands_sep = ',') {
+                    if (!is_numeric($value)) {
+                        return $value;
+                    }
+
+                    return number_format($value, $decimals, $decPoint, $thousands_sep);
+                },
+
                 'minArgs' => 1,
                 'maxArgs' => 4
             ],
