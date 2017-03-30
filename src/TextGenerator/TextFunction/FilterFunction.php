@@ -174,6 +174,10 @@ class FilterFunction implements FunctionInterface
             );
         }
 
+        if ($arguments[0] === $this->tagReplacer->getEmptyTag()) {
+            return '';
+        }
+
         if (isset($filter['maxArgs']) && count($arguments) > $filter['maxArgs']) {
             throw new \InvalidArgumentException(
                 sprintf("Filter %s expect maximum %d parameters, %d given.", $filterName, $filter['maxArgs'], (count($arguments)))
