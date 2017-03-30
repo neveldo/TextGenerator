@@ -1,6 +1,11 @@
 # ChangeLog
 Change log for TextGenerator
 
+## 1.1.0 - March 31, 2017
+- Add rmna function
+- Prevent filters to be called on empty values
+- Prevent 'number' filter to be called on non-numeric values
+
 ## 1.0.2 - March 14, 2017
 - Add u modifier to preg_replace_callback() call
 

@@ -174,8 +174,8 @@ class FilterFunction implements FunctionInterface
             );
         }
 
-        if ($arguments[0] === $this->tagReplacer->getEmptyTag()) {
-            return '';
+        if ($arguments[0] === $this->tagReplacer->getEmptyTag() || $arguments[0] === '') {
+            return $arguments[0];
         }
 
         if (isset($filter['maxArgs']) && count($arguments) > $filter['maxArgs']) {

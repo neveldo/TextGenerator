@@ -210,6 +210,28 @@ Output example :
 
     Hello
 
+### 'rmna'
+
+Return the argument only if it does not contain any empty values. It allows to prevent the display of sentences with missing values.
+
+Data :
+
+    [
+        [
+            'tag1' => '', // or null
+            'tag2' => 'ok', 
+        ]
+    ]
+
+Template example :
+
+    #rmna{test 1 : @tag1};;
+    #rmna{test 2 : @tag2}
+
+Output :
+
+    test 2 : ok
+    
 ## Complete example :
 
 Template :
