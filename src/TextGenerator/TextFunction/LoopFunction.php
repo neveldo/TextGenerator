@@ -77,7 +77,7 @@ class LoopFunction implements FunctionInterface
         }
 
         // Parse argument 2 : shuffle the items (true/false)
-        if (strtolower($arguments[2]) === 'true') {
+        if (mb_strtolower($arguments[2]) === 'true') {
             shuffle($loopStrings);
         }
 

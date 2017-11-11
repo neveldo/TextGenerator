@@ -1,6 +1,9 @@
 # ChangeLog
 Change log for TextGenerator
 
+## 1.1.1 - November 11, 2017
+- Replace strtolower() call to mb_strtolower() within LoopFunction 
+
 ## 1.1.0 - March 31, 2017
 - Add rmna function
 - Prevent filters to be called on empty values
