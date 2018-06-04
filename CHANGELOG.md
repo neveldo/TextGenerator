@@ -1,7 +1,7 @@
 # ChangeLog
 Change log for TextGenerator
 
-## 1.2 - June 4, 2018
+## 1.2.0 - June 4, 2018
 - Update phpunit and expression-language versions
 
 ## 1.1.1 - November 11, 2017
