@@ -4,7 +4,7 @@ namespace Neveldo\TextGenerator\Tag;
 
 use Neveldo\TextGenerator\TextFunction\RandomFunction;
 
-class RandomFunctionTest extends \PHPUnit_Framework_TestCase
+class RandomFunctionTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp() {
         $this->tagReplacer = new TagReplacer();

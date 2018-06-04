@@ -4,7 +4,7 @@ namespace Neveldo\TextGenerator\Tag;
 
 use Neveldo\TextGenerator\TextFunction\ShuffleFunction;
 
-class ShuffleFunctionTest extends \PHPUnit_Framework_TestCase
+class ShuffleFunctionTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp() {
         $this->tagReplacer = new TagReplacer();
@@ -13,13 +13,13 @@ class ShuffleFunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testWithZeroArgument()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->function->execute([], []);
     }
 
     public function testWithOneArgument()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->function->execute([','], [',']);
     }
 

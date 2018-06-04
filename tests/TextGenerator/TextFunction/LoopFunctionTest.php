@@ -4,7 +4,7 @@ namespace Neveldo\TextGenerator\Tag;
 
 use Neveldo\TextGenerator\TextFunction\LoopFunction;
 
-class LoopFunctionTest extends \PHPUnit_Framework_TestCase
+class LoopFunctionTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp() {
         $this->tagReplacer = new TagReplacer();
@@ -69,13 +69,13 @@ class LoopFunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testWith5Arguments()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->function->execute(['','','','',''], ['','','','','']);
     }
 
     public function testWith7Arguments()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->function->execute(['','','','','', '', ''], ['','','','','', '', '']);
     }
 

@@ -4,7 +4,7 @@ namespace Neveldo\TextGenerator\Tag;
 
 use Neveldo\TextGenerator\TextFunction\CoalesceFunction;
 
-class CoalesceFunctionTest extends \PHPUnit_Framework_TestCase
+class CoalesceFunctionTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp() {
         $this->tagReplacer = new TagReplacer();

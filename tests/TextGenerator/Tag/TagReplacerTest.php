@@ -2,7 +2,7 @@
 
 namespace Neveldo\TextGenerator\Tag;
 
-class TagReplacerTest extends \PHPUnit_Framework_TestCase
+class TagReplacerTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetTags()
     {

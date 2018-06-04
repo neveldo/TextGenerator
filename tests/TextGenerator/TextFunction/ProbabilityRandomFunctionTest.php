@@ -4,7 +4,7 @@ namespace Neveldo\TextGenerator\Tag;
 
 use Neveldo\TextGenerator\TextFunction\ProbabilityRandomFunction;
 
-class ProbabilityRandomFunctionTest extends \PHPUnit_Framework_TestCase
+class ProbabilityRandomFunctionTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp() {
         $this->tagReplacer = new TagReplacer();
@@ -13,7 +13,7 @@ class ProbabilityRandomFunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testWithZeroArgument()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->function->execute([], []);
     }
 
