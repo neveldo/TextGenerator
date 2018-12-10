@@ -1,6 +1,9 @@
 # ChangeLog
 Change log for TextGenerator
 
+## 1.2.1 - December 10, 2018
+- Fix reset sortedStatementsStack within TextGenerator::compile()
+
 ## 1.2.0 - June 4, 2018
 - Update phpunit and expression-language versions
 
