@@ -1,6 +1,9 @@
 # ChangeLog
 Change log for TextGenerator
 
+## 1.3 - February 9, 2020
+- Add "replace" filter
+
 ## 1.2.1 - December 10, 2018
 - Fix reset sortedStatementsStack within TextGenerator::compile()
 
