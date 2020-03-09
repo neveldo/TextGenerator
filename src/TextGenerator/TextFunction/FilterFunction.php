@@ -114,6 +114,11 @@ class FilterFunction implements FunctionInterface
                 'minArgs' => 2,
                 'maxArgs' => 3
             ],
+            'replace' => [
+                'function' => 'str_replace',
+                'minArgs' => 3,
+                'maxArgs' => 3
+            ],
             'timestamp' => [
                 'function' => function($format, $timestamp = null) {
                     if (isset($timestamp)) {
