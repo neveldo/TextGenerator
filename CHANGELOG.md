@@ -1,6 +1,9 @@
 # ChangeLog
 Change log for TextGenerator
 
+## 1.5.0 - February 11, 2020
+- ProbabilityRandomFunction and RandomFunction now returns '[empty]'' instead of '' if there is no valid choices as arguments.
+
 ## 1.4.0 - February 11, 2020
 - ExprFunction now returns [empty] if the expression thrown an Error or an Exception.
 
