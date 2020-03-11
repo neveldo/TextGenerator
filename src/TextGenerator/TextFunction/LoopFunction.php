@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
 /**
@@ -54,7 +55,7 @@ class LoopFunction implements FunctionInterface
         // Parse argument 0 : the tag that contain the data to loop on
         $loopData = $this->tagReplacer->getTag($originalArguments[0]);
         if (!is_array($loopData)) {
-            return '';
+            return TagReplacer::EMPTY_TAG;
         }
 
         $loopStrings = [];

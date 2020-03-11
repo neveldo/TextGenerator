@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
 /**
@@ -190,9 +191,14 @@ class FilterFunction implements FunctionInterface
         }
 
         if (is_callable($filter['function'])) {
-            return call_user_func_array($filter['function'], $arguments);
+            try {
+                return call_user_func_array($filter['function'], $arguments);
+            } catch (\Exception $e) {
+                return TagReplacer::EMPTY_TAG;
+            }
         }
-        return '';
+
+        return TagReplacer::EMPTY_TAG;
     }
 
     /**

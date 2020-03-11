@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 use Neveldo\TextGenerator\ExpressionLanguage\ExpressionLanguage;
 
@@ -57,7 +58,7 @@ class IfFunction implements FunctionInterface
         } else if (isset($arguments[2])) {
             return $arguments[2];
         }
-        return '';
+        return TagReplacer::EMPTY_TAG;
     }
 
 }

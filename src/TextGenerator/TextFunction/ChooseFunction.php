@@ -2,13 +2,14 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
 /**
  * Class ChooseFunction
  * 'choose' function :  returns one item from the function arguments
  * Examples :
- * #random{2|one|two|three} will output 'two'
+ * #choose{2|one|two|three} will output 'two'
  *
  * @package Neveldo\TextGenerator\TextFunction
  */
@@ -51,7 +52,7 @@ class ChooseFunction implements FunctionInterface
             return $arguments[$index];
         }
 
-        return '';
+        return TagReplacer::EMPTY_TAG;
     }
 
 }

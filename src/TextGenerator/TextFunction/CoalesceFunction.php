@@ -2,16 +2,8 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
-
-/**
- * Class ChooseFunction
- * 'choose' function : returns one item from the function arguments
- * Examples :
- * #random{2|one|two|three} will output 'two'
- *
- * @package Neveldo\TextGenerator\TextFunction
- */
 
 /**
  * Class CoalesceFunction
@@ -51,7 +43,7 @@ class CoalesceFunction implements FunctionInterface
             }
         }
 
-        return '';
+        return TagReplacer::EMPTY_TAG;
     }
 
 }
