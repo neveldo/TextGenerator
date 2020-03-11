@@ -1,6 +1,9 @@
 # ChangeLog
 Change log for TextGenerator
 
+## 1.4.0 - February 11, 2020
+- ExprFunction now returns [empty] if the expression thrown an Error or an Exception.
+
 ## 1.3.0 - February 9, 2020
 - Add "replace" filter
 
