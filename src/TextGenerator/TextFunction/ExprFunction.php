@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 use Neveldo\TextGenerator\ExpressionLanguage\ExpressionLanguage;
 
@@ -43,7 +44,16 @@ class ExprFunction implements FunctionInterface
             );
         }
 
-        return (new ExpressionLanguage())->evaluate($this->tagReplacer->sanitizeTagNames($originalArguments[0]), $this->tagReplacer->getTags());
+        try {
+            return (new ExpressionLanguage())->evaluate(
+                $this->tagReplacer->sanitizeTagNames($originalArguments[0]),
+                $this->tagReplacer->getTags()
+            );
+        } catch (\Exception $e) {
+            return TagReplacer::EMPTY_TAG;
+        }  catch (\Error $e) {
+            return TagReplacer::EMPTY_TAG;
+        }
     }
 
 }
