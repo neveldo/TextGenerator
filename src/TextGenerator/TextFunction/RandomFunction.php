@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
 /**
@@ -41,7 +42,7 @@ class RandomFunction implements FunctionInterface
         });
 
         if (count($arguments) === 0) {
-            return '';
+            return TagReplacer::EMPTY_TAG;
         }
 
         return $arguments[array_rand($arguments)];

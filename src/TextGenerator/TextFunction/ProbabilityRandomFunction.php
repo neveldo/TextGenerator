@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
 /**
@@ -49,7 +50,7 @@ class ProbabilityRandomFunction implements FunctionInterface
         });
 
         if (count($arguments) === 0) {
-            return '';
+            return TagReplacer::EMPTY_TAG;
         }
 
         $options = [];
@@ -83,7 +84,7 @@ class ProbabilityRandomFunction implements FunctionInterface
         }
 
         if (count($options) === 0) {
-            return '';
+            return TagReplacer::EMPTY_TAG;
         }
 
         return $options[$probabilities[array_rand($probabilities)]]['value'];
