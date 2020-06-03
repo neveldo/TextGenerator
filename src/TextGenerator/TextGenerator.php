@@ -164,6 +164,7 @@ class TextGenerator
         $this->template = $template;
         $this->statementsStack = [];
         $this->sortedStatementsStack = [];
+        $this->executionStackSize = 0;
 
         $this->compiledTemplate = $this->parseIndentations($template);
         $this->compiledTemplate = $this->compileTemplate($this->compiledTemplate);
