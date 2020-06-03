@@ -38,12 +38,12 @@ class ChooseFunctionTest extends \PHPUnit\Framework\TestCase
     public function testChooseWithUnexistantArg()
     {
         $result = $this->function->execute([0, 'test1','test2', 'test3'], [0, 'test1','test2', 'test3']);
-        $this->assertEquals('', $result);
+        $this->assertEquals('[EMPTY]', $result);
     }
 
     public function testChooseWithUnexistantArg2()
     {
         $result = $this->function->execute([7, 'test1','test2', 'test3'], [7, 'test1','test2', 'test3']);
-        $this->assertEquals('', $result);
+        $this->assertEquals('[EMPTY]', $result);
     }
 }

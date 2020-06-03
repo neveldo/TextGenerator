@@ -44,6 +44,6 @@ class IfFunctionTest extends \PHPUnit\Framework\TestCase
     public function testConditionFalseWithNoElse()
     {
         $result = $this->function->execute(['2 < 1', 'ok'], ['2 < 1', 'ok']);
-        $this->assertEquals('', $result);
+        $this->assertEquals('[EMPTY]', $result);
     }
 }

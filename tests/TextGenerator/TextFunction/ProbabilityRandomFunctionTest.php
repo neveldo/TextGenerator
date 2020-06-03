@@ -38,7 +38,7 @@ class ProbabilityRandomFunctionTest extends \PHPUnit\Framework\TestCase
     public function testWithStringThatContainsEmptyTag2()
     {
         $result = $this->function->execute(['9:test1' . $this->tagReplacer->getEmptyTag()], ['9:test1' . $this->tagReplacer->getEmptyTag()]);
-        $this->assertEquals('', $result);
+        $this->assertEquals('[EMPTY]', $result);
     }
 
     public function testWithWrongProbabilities()
@@ -50,18 +50,18 @@ class ProbabilityRandomFunctionTest extends \PHPUnit\Framework\TestCase
     public function testWithWrongProbabilities2()
     {
         $result = $this->function->execute(['test1', 'test2'], ['test1', 'test2']);
-        $this->assertEquals('', $result);
+        $this->assertEquals('[EMPTY]', $result);
     }
 
     public function testWithWrongProbabilities3()
     {
         $result = $this->function->execute(['xx:test1', 'yy:test2'], ['xx:test1', 'yy:test2']);
-        $this->assertEquals('', $result);
+        $this->assertEquals('[EMPTY]', $result);
     }
 
     public function testWithWrongProbabilities4()
     {
         $result = $this->function->execute(['-5:test1', '-8:test2'], ['-5:test1', '-8:test2']);
-        $this->assertEquals('', $result);
+        $this->assertEquals('[EMPTY]', $result);
     }
 }

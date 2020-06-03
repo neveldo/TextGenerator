@@ -14,7 +14,7 @@ class RandomFunctionTest extends \PHPUnit\Framework\TestCase
     public function testWithZeroArgument()
     {
         $result = $this->function->execute([], []);
-        $this->assertEquals('', $result);
+        $this->assertEquals('[EMPTY]', $result);
     }
 
     public function testWithOneArgument()

@@ -14,19 +14,19 @@ class CoalesceFunctionTest extends \PHPUnit\Framework\TestCase
     public function testWithZeroArgument()
     {
         $result = $this->function->execute([], []);
-        $this->assertEquals('', $result);
+        $this->assertEquals('[EMPTY]', $result);
     }
 
     public function testWithOneEmptyArgument()
     {
         $result = $this->function->execute([''], ['']);
-        $this->assertEquals('', $result);
+        $this->assertEquals('[EMPTY]', $result);
     }
 
     public function testWithOneNullArgument()
     {
         $result = $this->function->execute([null], [null]);
-        $this->assertEquals('', $result);
+        $this->assertEquals('[EMPTY]', $result);
     }
 
     public function testWithOneRegularArgument()

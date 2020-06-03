@@ -145,7 +145,7 @@ class LoopFunctionTest extends \PHPUnit\Framework\TestCase
             'loop_tag' => 'not_an_array'
         ]);
         $result = $this->function->execute(['@loop_tag', '*', true, ', ', ' and ', '@var1 - @var2'], ['@loop_tag', '*', true, ', ', ' and ', '@var1 - @var2']);
-        $this->assertEquals('', $result);
+        $this->assertEquals('[EMPTY]', $result);
     }
 
     public function testRegularLoopWithATagThatContainsAnEmptyTag()
