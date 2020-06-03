@@ -25,6 +25,7 @@ class SetFunctionTest extends \PHPUnit\Framework\TestCase
     public function testAssignementWithAnotherTag2()
     {
         $this->textGenerator->compile("#set{@test1|Lorem}#set{@test2|@test1 ipsum}@test2");
+
         $result = $this->textGenerator->generate([]);
         $this->assertEquals('Lorem ipsum', $result);
     }

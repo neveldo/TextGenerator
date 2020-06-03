@@ -45,20 +45,9 @@ class TextGenerator
     private $compiledTemplate;
 
     /**
-     * @var array execution stack to run for generating a text
-     */
-    private $statementsStack = [];
-
-    /**
      * @var array sorted execution stack to run for generating a text
      */
-    private $sortedStatementsStack = [];
-
-
-    /**
-     * @var int execution stack size
-     */
-    private $executionStackSize = 0;
+    private $executionStack = [];
 
     /**
      * TextGenerator constructor.
@@ -106,7 +95,7 @@ class TextGenerator
 
         // Execute the functions stack starting with the deepest functions and ending
         // with the shallowest ones
-        foreach($this->sortedStatementsStack as $statement) {
+        foreach($this->executionStack as $statement) {
 
             $openingTag = '[' . $statement['id'] . ']';
             $closingTag =  '[/' . $statement['id'] . ']';
@@ -162,32 +151,67 @@ class TextGenerator
     public function compile($template)
     {
         $this->template = $template;
-        $this->statementsStack = [];
-        $this->sortedStatementsStack = [];
-        $this->executionStackSize = 0;
 
-        $this->compiledTemplate = $this->parseIndentations($template);
-        $this->compiledTemplate = $this->compileTemplate($this->compiledTemplate);
-        $this->sortStatements();
+        $template = $this->parseIndentations($template);
+
+        $data = $this->compileTemplate($template);
+
+        $this->executionStack = $this->getSortedStatements($data['executionStack']);
+        $this->compiledTemplate = $data['compiledTemplate'];
 
         return $this;
     }
 
     /**
      * Sort the function calls tree from left to right and from bottom to up
-     * @param $parent null|int parent statement ID
+     * @param array $statements
+     * @param null|int $parent parent statement ID
+     * @return array
      */
-    public function sortStatements($parent = null)
+    public function getSortedStatements(array $statements, $parent = null): array
     {
-        foreach($this->statementsStack as $id => $options) {
-            if ($options['parent'] === $parent) {
-                $this->sortStatements($id);
-            }
+        if (count($statements) === 0) {
+            return [];
         }
 
-        if ($parent !== null) {
-            $this->sortedStatementsStack[] = $this->statementsStack[$parent];
+        $linkedStatements = [];
+
+        $lastStatement = null;
+        foreach ($statements as $statement) {
+            if ($statement['parent'] === null) {
+
+                if ($lastStatement === null) {
+                    $statement['prev'] = -1;
+                    $statement['next'] = -1;
+                } else {
+                    $statement['prev'] = $lastStatement['id'];
+                    $statement['next'] = -1;
+                    $linkedStatements[$lastStatement['id']]['next'] = $statement['id'];
+                }
+                $lastStatement = $statement;
+            } else {
+                $statement['next'] = $statement['parent'];
+
+                $parentPrevId = $linkedStatements[$statement['parent']]['prev'];
+
+                $statement['prev'] = $parentPrevId;
+
+                $linkedStatements[$parentPrevId]['next'] = $statement['id'];
+                $linkedStatements[$statement['parent']]['prev'] = $statement['id'];
+            }
+            $linkedStatements[$statement['id']] = $statement;
         }
+
+        $statement = $linkedStatements[array_flip(array_column($linkedStatements, 'prev'))[-1]];
+        $sortedStatements = [
+            $statement
+        ];
+        while ($statement['next'] !== -1) {
+            $statement = $linkedStatements[$statement['next']];
+            $sortedStatements[] = $statement;
+        }
+
+        return $sortedStatements;
     }
 
     /**
@@ -202,45 +226,101 @@ class TextGenerator
     }
 
     /**
-     * Parse recursively the template to extract the execution stack
+     * Parse the template to compute the execution stack
      * @param string $template
-     * @param int|null $parent parent function ID
-     * @return string $template
+     * @return array Array that contains compiledTemplate and executionStack outputs
      * @throw \InvalidArgumentException if the template contains unknown functions
      */
-    protected function compileTemplate($template, $parent = null) {
-        if (is_array($template)) {
+    protected function compileTemplate($template)
+    {
+        $beginFunctionChar = '#';
+        $beginArgsChar = '{';
+        $endArgsChar = '}';
+        $authorizedCharsFuncName = array_flip(array_merge(range('a', 'z'), ['_']));
 
-            // $template = '#fct{...}'
-            $template = $template[1];
+        $template = preg_split('//u', $template, -1, PREG_SPLIT_NO_EMPTY);
 
-            // Add the function call into the execution stack
-            $functionName = mb_substr($template, 1, mb_strpos($template, '{') - 1);
-            if (!in_array($functionName, array_keys($this->functions))) {
-                throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $functionName));
+        $compiledTemplate = '';
+        $executionStack = [];
+        $unclosedFunctionsStack = [];
+
+        $callingFunction = false;
+        $callingFunctionName = '';
+
+        $parsingEnded = false;
+        $currentCharIndex = 0;
+        $currentStackIndex = 0;
+
+        while(!$parsingEnded) {
+            if (!isset($template[$currentCharIndex])) {
+                $parsingEnded = true;
+                continue;
             }
-            $this->statementsStack[] = ['id' => $this->executionStackSize, 'function' => $functionName, 'parent' => $parent];
 
-            // Update the template to replace function calls by references to the execution stack like : [9]...[/9]
-            $template = $this->substringReplace($template, '[' . $this->executionStackSize . ']', 0, mb_strpos($template, '{') + 1);
-            $template = $this->substringReplace($template, '[/' . $this->executionStackSize . ']', mb_strlen($template) - 1, 1);
-            $parent = $this->executionStackSize;
+            // Parsing function name
+            if ($callingFunction) {
+                if ($template[$currentCharIndex] === $beginArgsChar && mb_strlen($callingFunctionName) !== 0) {
+                    // End of function name
+                    if (!in_array($callingFunctionName, array_keys($this->functions))) {
+                        throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $callingFunctionName));
+                    }
 
-            ++$this->executionStackSize;
+                    $compiledTemplate .= '[' . $currentStackIndex . ']';
+
+                    $parent = null;
+                    if (count($unclosedFunctionsStack) !== 0) {
+                        $parent = $unclosedFunctionsStack[count($unclosedFunctionsStack) - 1];
+                    }
+
+                    $executionStack[] = [
+                        'id' => $currentStackIndex,
+                        'function' => $callingFunctionName,
+                        'parent' => $parent,
+                    ];
+
+                    $unclosedFunctionsStack[] = $currentStackIndex;
+
+                    $currentStackIndex++;
+
+                    $callingFunction = false;
+                    $callingFunctionName = '';
+                } elseif (isset($authorizedCharsFuncName[$template[$currentCharIndex]])) {
+                    // Function name new char
+                    $callingFunctionName .= $template[$currentCharIndex];
+                } else {
+                    // Wrong char in function name, ignore the call
+                    $compiledTemplate .= '#' . $callingFunctionName . $template[$currentCharIndex];
+                    $callingFunction = false;
+                    $callingFunctionName = '';
+                }
+            } else {
+                if ($template[$currentCharIndex] === $beginFunctionChar) {
+                    // Begin of new function call
+                    $callingFunction = true;
+                    $callingFunctionName = '';
+                } elseif ($template[$currentCharIndex] === $endArgsChar) {
+                    // End of function call
+                    if (($lastUnclosedFunction = array_pop($unclosedFunctionsStack)) !== null) {
+                        $compiledTemplate .= '[/' . $lastUnclosedFunction . ']';
+                    } else {
+                        $compiledTemplate .= $template[$currentCharIndex];
+                    }
+                } else {
+                    $compiledTemplate .= $template[$currentCharIndex];
+                }
+            }
+            $currentCharIndex++;
         }
 
-        return preg_replace_callback(
-            '/(#[a-z_]+\{(?:[^\{\}]|(?R))+\})/us',
-            function($template) use($parent) {
-                return $this->compileTemplate($template, $parent);
-            },
-            $template
-        );
+        return [
+            'compiledTemplate' => $compiledTemplate,
+            'executionStack' => $executionStack,
+        ];
     }
 
     /**
      * Register a text function
-     * @param $name function name to be used within the template
+     * @param $name string function name to be used within the template
      * @param FunctionInterface $function The text function
      * @return $this
      */
@@ -282,5 +362,37 @@ class TextGenerator
     public function getTagReplacer()
     {
         return $this->tagReplacer;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompiledTemplate(): string
+    {
+        return $this->compiledTemplate;
+    }
+
+    /**
+     * @param string $compiledTemplate
+     */
+    public function setCompiledTemplate(string $compiledTemplate): void
+    {
+        $this->compiledTemplate = $compiledTemplate;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExecutionStack(): array
+    {
+        return $this->executionStack;
+    }
+
+    /**
+     * @param array $executionStack
+     */
+    public function setExecutionStack(array $executionStack): void
+    {
+        $this->executionStack = $executionStack;
     }
 }
