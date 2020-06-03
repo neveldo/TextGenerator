@@ -156,4 +156,11 @@ class TextGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, 'Hello');
     }
 
+    public function testImbricatedFunctions()
+    {
+        $this->textGenerator->compile("Test imbricated set/filter#set{@my_tag1|#filter{round|3.55|1}0}. Test imbricated if/filter : #if{@my_tag1 == 3.6|ok #filter{round|@my_tag1} #filter{round|@my_tag1|1}|notok}.");
+        $result = $this->textGenerator->generate([]);
+        $this->assertEquals($result, 'Test imbricated set/filter. Test imbricated if/filter : ok 4 3.6.');
+    }
+
 }
