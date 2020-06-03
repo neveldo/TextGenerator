@@ -1,6 +1,11 @@
 # ChangeLog
 Change log for TextGenerator
 
+## 1.7.0 - June 3, 2020
+- Remove recursive regex and recursive sort in template compilation step
+- Add test testImbricatedFunctions()
+- Fix unit tests
+
 ## 1.6.0 - February 11, 2020
 - Other text functions now returns '[empty]' instead of ''
 
