@@ -4,7 +4,7 @@ namespace Neveldo\TextGenerator;
 
 class SetFunctionTest extends \PHPUnit\Framework\TestCase
 {
-    public function setUp() {
+    public function setup(): void {
         $this->textGenerator = new TextGenerator();
     }
 

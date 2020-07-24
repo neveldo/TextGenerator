@@ -6,7 +6,7 @@ use Neveldo\TextGenerator\TextFunction\LoopFunction;
 
 class LoopFunctionTest extends \PHPUnit\Framework\TestCase
 {
-    public function setUp() {
+    public function setup(): void {
         $this->tagReplacer = new TagReplacer();
         $this->function = new LoopFunction($this->tagReplacer);
         $this->oneElementTag = [

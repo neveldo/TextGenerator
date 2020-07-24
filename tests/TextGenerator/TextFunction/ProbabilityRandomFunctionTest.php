@@ -6,7 +6,7 @@ use Neveldo\TextGenerator\TextFunction\ProbabilityRandomFunction;
 
 class ProbabilityRandomFunctionTest extends \PHPUnit\Framework\TestCase
 {
-    public function setUp() {
+    public function setup(): void {
         $this->tagReplacer = new TagReplacer();
         $this->function = new ProbabilityRandomFunction($this->tagReplacer);
     }

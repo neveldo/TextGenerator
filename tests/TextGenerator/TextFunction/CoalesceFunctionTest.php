@@ -6,7 +6,7 @@ use Neveldo\TextGenerator\TextFunction\CoalesceFunction;
 
 class CoalesceFunctionTest extends \PHPUnit\Framework\TestCase
 {
-    public function setUp() {
+    public function setup(): void {
         $this->tagReplacer = new TagReplacer();
         $this->function = new CoalesceFunction($this->tagReplacer);
     }
