@@ -153,10 +153,13 @@ class TextGenerator
         $this->template = $template;
 
         $template = $this->parseIndentations($template);
-
+        $before = microtime(true);
         $data = $this->compileTemplate($template);
+        echo "\n" . (microtime(true) - $before) . "s";
+        exit;
 
         $this->executionStack = $this->getSortedStatements($data['executionStack']);
+
         $this->compiledTemplate = $data['compiledTemplate'];
 
         return $this;
