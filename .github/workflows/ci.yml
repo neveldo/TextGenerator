@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - name: start running unit tests
+        run: Start running unit tests
+      - uses: actions/checkout@v2
       - uses: php-actions/composer@v1
       - uses: php-actions/phpunit@v1
