@@ -8,8 +8,25 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: php-actions/composer@v1
-      - name: PHPUnit tests
-        uses: php-actions/phpunit@v1
-        with:
-          config: phpunit.xml
+      -   name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            coverage: "none"
+            extensions: "json"
+            ini-values: "memory_limit=-1"
+            php-version: 7.4
+      -   name: Determine composer cache directory
+          id: composer-cache
+          run: echo "::set-output name=directory::$(composer config cache-dir)"
+
+      -   name: Cache composer dependencies
+          uses: actions/cache@v1
+          with:
+            path: ${{ steps.composer-cache.outputs.directory }}
+            key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+            restore-keys: ${{ matrix.php }}-composer-
+      -   name: Install dependencies
+          run: |
+            composer install --no-progress --no-suggest --ansi
+      -   name: Run tests
+          run: ./vendor/phpunit/phpunit
