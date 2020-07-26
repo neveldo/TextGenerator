@@ -18,15 +18,15 @@ jobs:
       -   name: Determine composer cache directory
           id: composer-cache
           run: echo "::set-output name=directory::$(composer config cache-dir)"
-
-      -   name: Cache composer dependencies
-          uses: actions/cache@v1
-          with:
-            path: ${{ steps.composer-cache.outputs.directory }}
-            key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
-            restore-keys: ${{ matrix.php }}-composer-
-      -   name: Install dependencies
-          run: |
-            composer install --no-progress --no-suggest --ansi
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
       -   name: Run tests
           run: ./vendor/phpunit/phpunit
