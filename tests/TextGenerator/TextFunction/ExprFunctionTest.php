@@ -6,7 +6,7 @@ use Neveldo\TextGenerator\TextFunction\ExprFunction;
 
 class ExprFunctionTest extends \PHPUnit\Framework\TestCase
 {
-    public function setUp() {
+    public function setup(): void {
         $this->tagReplacer = new TagReplacer();
         $this->function = new ExprFunction($this->tagReplacer);
     }

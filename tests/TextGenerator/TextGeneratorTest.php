@@ -2,11 +2,9 @@
 
 namespace Neveldo\TextGenerator;
 
-echo "hihihihih";
-
 class TextGeneratorTest extends \PHPUnit\Framework\TestCase
 {
-    public function setUp() {
+    public function setup(): void {
         $this->textGenerator = new TextGenerator();
     }
 

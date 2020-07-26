@@ -9,7 +9,7 @@ class TagReplacerTest extends \PHPUnit\Framework\TestCase
         $tr = new TagReplacer();
         $tr->setTags(['tag1' => 'val1', 'tag2' => 'val2']);
         $this->assertEquals(['tag1' => 'val1', 'tag2' => 'val2'], $tr->getTags());
-        $this->assertEquals(['@tag1' => 'val1', '@tag2' => 'val2'], $tr->getEscapedTags());
+        $this->assertEquals(['@tag1' => 'val1ERROR', '@tag2' => 'val2'], $tr->getEscapedTags());
     }
 
     public function testSetTagsWithArrayTag()
