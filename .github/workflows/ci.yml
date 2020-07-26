@@ -8,16 +8,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      -   name: Setup PHP
-          uses: shivammathur/setup-php@v2
-          with:
-            coverage: "none"
-            extensions: "json"
-            ini-values: "memory_limit=-1"
-            php-version: 7.4
-      -   name: Determine composer cache directory
-          id: composer-cache
-          run: echo "::set-output name=directory::$(composer config cache-dir)"
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: "none"
+          extensions: "json"
+          ini-values: "memory_limit=-1"
+          php-version: 7.4
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
