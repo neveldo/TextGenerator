@@ -155,7 +155,6 @@ class TextGenerator
         $this->template = $template;
 
         $template = $this->parseIndentations($template);
-
         $data = $this->compileTemplate($template);
 
         $this->executionStack = $this->getSortedStatements($data['executionStack']);
