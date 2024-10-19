@@ -130,6 +130,18 @@ Output example :
 
     second option
 
+### 'reprandom'
+
+Return a reproducable random choice, based on the Mersenne Twister. Using the same `seed` value will lead to the same choice every time.
+
+Template example :
+
+    #random{seed|first option|second option|third option}
+
+Output example :
+
+    second option
+
 ### 'prandom'
 
 Return randomly one of the arguments, taking account of the probability set to each value. In the example below, the first parameter 'one' will have 80% of chance to be output.

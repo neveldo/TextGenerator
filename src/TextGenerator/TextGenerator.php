@@ -11,6 +11,7 @@ use Neveldo\TextGenerator\TextFunction\IfFunction;
 use Neveldo\TextGenerator\TextFunction\LoopFunction;
 use Neveldo\TextGenerator\TextFunction\ProbabilityRandomFunction;
 use Neveldo\TextGenerator\TextFunction\RandomFunction;
+use Neveldo\TextGenerator\TextFunction\ReproducableRandomFunction;	
 use Neveldo\TextGenerator\TextFunction\RmnaFunction;
 use Neveldo\TextGenerator\TextFunction\SetFunction;
 use Neveldo\TextGenerator\TextFunction\ShuffleFunction;
@@ -74,6 +75,7 @@ class TextGenerator
             ->registerFunction('filter', new FilterFunction($this->tagReplacer))
             ->registerFunction('coalesce', new CoalesceFunction($this->tagReplacer))
             ->registerFunction('rmna', new RmnaFunction($this->tagReplacer))
+            ->registerFunction('reprandom', new ReproducableRandomFunction($this->tagReplacer))
         ;
     }
 
