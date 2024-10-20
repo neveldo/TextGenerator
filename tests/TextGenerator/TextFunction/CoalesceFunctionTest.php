@@ -2,44 +2,43 @@
 
 namespace Neveldo\TextGenerator\Tag;
 
+use PHPUnit\Framework\TestCase;
 use Neveldo\TextGenerator\TextFunction\CoalesceFunction;
 
-class CoalesceFunctionTest extends \PHPUnit\Framework\TestCase
+class CoalesceFunctionTest extends TestCase
 {
-    public function setUp() {
+    private TagReplacer $tagReplacer;
+    private CoalesceFunction $coalesceFunction;
+
+    public function setUp(): void
+    {
         $this->tagReplacer = new TagReplacer();
-        $this->function = new CoalesceFunction($this->tagReplacer);
+        $this->coalesceFunction = new CoalesceFunction($this->tagReplacer);
     }
 
-    public function testWithZeroArgument()
+    public function testWithZeroArgument(): void
     {
-        $result = $this->function->execute([], []);
+        $result = $this->coalesceFunction->execute([], []);
         $this->assertEquals('[EMPTY]', $result);
     }
 
-    public function testWithOneEmptyArgument()
+    public function testWithOneEmptyArgument(): void
     {
-        $result = $this->function->execute([''], ['']);
+        $result = $this->coalesceFunction->execute([''], ['']);
         $this->assertEquals('[EMPTY]', $result);
     }
 
-    public function testWithOneNullArgument()
+    public function testWithOneRegularArgument(): void
     {
-        $result = $this->function->execute([null], [null]);
-        $this->assertEquals('[EMPTY]', $result);
-    }
-
-    public function testWithOneRegularArgument()
-    {
-        $result = $this->function->execute(['Hello'], ['Hello']);
+        $result = $this->coalesceFunction->execute(['Hello'], ['Hello']);
         $this->assertEquals('Hello', $result);
     }
 
-    public function testEmptyAndRegularsArguments()
+    public function testEmptyAndRegularsArguments(): void
     {
-        $result = $this->function->execute(
-            [$this->tagReplacer->getEmptyTag(), null, '', 'value1', 'value2'],
-            [$this->tagReplacer->getEmptyTag(), null, '', 'value1', 'value2']
+        $result = $this->coalesceFunction->execute(
+            [$this->tagReplacer->getEmptyTag(), '', 'value1', 'value2'],
+            [$this->tagReplacer->getEmptyTag(), '', 'value1', 'value2']
         );
         $this->assertEquals('value1', $result);
     }

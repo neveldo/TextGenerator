@@ -1,1 +1,4 @@
-/tests/ export-ignore
+/tests/           export-ignore
+/sample/           export-ignore
+/phpunit.xml.dist export-ignore
+/Dockerfile       export-ignore

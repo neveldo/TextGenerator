@@ -2,46 +2,48 @@
 
 namespace Neveldo\TextGenerator\Tag;
 
-class TagReplacerTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class TagReplacerTest extends TestCase
 {
-    public function testSetTags()
+    public function testSetTags(): void
     {
-        $tr = new TagReplacer();
-        $tr->setTags(['tag1' => 'val1', 'tag2' => 'val2']);
-        $this->assertEquals(['tag1' => 'val1', 'tag2' => 'val2'], $tr->getTags());
-        $this->assertEquals(['@tag1' => 'val1', '@tag2' => 'val2'], $tr->getEscapedTags());
+        $tagReplacer = new TagReplacer();
+        $tagReplacer->setTags(['tag1' => 'val1', 'tag2' => 'val2']);
+        $this->assertEquals(['tag1' => 'val1', 'tag2' => 'val2'], $tagReplacer->getTags());
+        $this->assertEquals(['@tag1' => 'val1', '@tag2' => 'val2'], $tagReplacer->getEscapedTags());
     }
 
-    public function testSetTagsWithArrayTag()
+    public function testSetTagsWithArrayTag(): void
     {
-        $tr = new TagReplacer();
-        $tr->setTags(['tag1' => 'val1', 'tag2' => ['sub_tag' => 'sub_val']]);
-        $this->assertEquals(['tag1' => 'val1', 'tag2' => ['sub_tag' => 'sub_val']], $tr->getTags());
-        $this->assertEquals(['@tag1' => 'val1'], $tr->getEscapedTags());
+        $tagReplacer = new TagReplacer();
+        $tagReplacer->setTags(['tag1' => 'val1', 'tag2' => [['sub_tag' => 'sub_val']]]);
+        $this->assertEquals(['tag1' => 'val1', 'tag2' => [['sub_tag' => 'sub_val']]], $tagReplacer->getTags());
+        $this->assertEquals(['@tag1' => 'val1'], $tagReplacer->getEscapedTags());
     }
 
-    public function testSetTagsWithEmptyTag()
+    public function testSetTagsWithEmptyTag(): void
     {
-        $tr = new TagReplacer();
-        $tr->setTags(['tag1' => '', 'tag2' => 'val1', 'tag3' => null]);
-        $this->assertEquals(['tag1' => '', 'tag2' => 'val1', 'tag3' => null], $tr->getTags());
-        $this->assertEquals(['@tag1' => $tr->getEmptyTag(), '@tag2' => 'val1', '@tag3' => $tr->getEmptyTag()], $tr->getEscapedTags());
+        $tagReplacer = new TagReplacer();
+        $tagReplacer->setTags(['tag1' => '', 'tag2' => 'val1', 'tag3' => '']);
+        $this->assertEquals(['tag1' => '', 'tag2' => 'val1', 'tag3' => ''], $tagReplacer->getTags());
+        $this->assertEquals(['@tag1' => $tagReplacer->getEmptyTag(), '@tag2' => 'val1', '@tag3' => $tagReplacer->getEmptyTag()], $tagReplacer->getEscapedTags());
     }
 
-    public function testReplaceRegularTags()
+    public function testReplaceRegularTags(): void
     {
-        $tr = new TagReplacer();
-        $tr->setTags(['tag1' => 'val1', 'tag2' => 'val2']);
-        $result = $tr->replace("test1@tag1test2 @tag2 test3 @tag3 tag2 test4");
+        $tagReplacer = new TagReplacer();
+        $tagReplacer->setTags(['tag1' => 'val1', 'tag2' => 'val2']);
+        $result = $tagReplacer->replace("test1@tag1test2 @tag2 test3 @tag3 tag2 test4");
         $this->assertEquals("test1val1test2 val2 test3 @tag3 tag2 test4", $result);
     }
 
-    public function testReplaceTagsWithEmptyTag()
+    public function testReplaceTagsWithEmptyTag(): void
     {
-        $tr = new TagReplacer();
-        $tr->setTags(['tag1' => '', 'tag2' => 'val1', 'tag3' => null]);
+        $tagReplacer = new TagReplacer();
+        $tagReplacer->setTags(['tag1' => '', 'tag2' => 'val1', 'tag3' => '']);
 
-        $result = $tr->replace("test @tag1 test @tag2 test @tag3");
-        $this->assertEquals("test " . $tr->getEmptyTag() . " test val1 test " . $tr->getEmptyTag(), $result);
+        $result = $tagReplacer->replace("test @tag1 test @tag2 test @tag3");
+        $this->assertEquals("test " . $tagReplacer->getEmptyTag() . " test val1 test " . $tagReplacer->getEmptyTag(), $result);
     }
 }

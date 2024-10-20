@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use InvalidArgumentException;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
 /**
@@ -14,34 +15,24 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
  */
 class SetFunction implements FunctionInterface
 {
-    /**
-     * @var TagReplacerInterface Tag Replacer service
-     */
-    private $tagReplacer;
-
-    /**
-     * SetFunction constructor.
-     * @param TagReplacerInterface $tagReplacer
-     */
-    public function __construct(TagReplacerInterface $tagReplacer)
+    public function __construct(private readonly TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tagReplacer;
     }
 
     /**
      * Handle set function
-     * @param array $arguments list of arguments where tags have been replaced by their values
-     * @param array $originalArguments list of original arguments
+     * @param array<int,string> $arguments list of arguments where tags have been replaced by their values
+     * @param array<int,string> $originalArguments list of original arguments
      */
-    public function execute(array $arguments, array $originalArguments)
+    public function execute(array $arguments, array $originalArguments): string
     {
         if (count($arguments) !== 2) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf("SetFunction expect exactly two parameters (tag name and tag value), %d given.", count($arguments))
             );
         }
 
-        $this->tagReplacer->addTag(mb_substr(trim($originalArguments[0]), 1), $arguments[1]);
+        $this->tagReplacer->addTag(mb_substr(trim((string) $originalArguments[0]), 1), $arguments[1]);
 
         return '';
     }

@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use mersenne_twister\twister;
 use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
@@ -15,39 +16,27 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
  */
 class ReproducableRandomFunction implements FunctionInterface
 {
-    /**
-     * @var TagReplacerInterface Tag Replacer service
-     */
-    private $tagReplacer;
-
-    /**
-     * ReprodudableRandomFunction constructor.
-     * @param TagReplacerInterface $tagReplacer
-     */
-    public function __construct(TagReplacerInterface $tagReplacer)
+    public function __construct(private readonly TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tagReplacer;
     }
 
     /**
      * Handle Reproducable Random function
-     * @param array $arguments list of arguments where tags have been replaced by their values
-     * @param array $originalArguments list of original arguments
+     * @param array<int,string> $arguments list of arguments where tags have been replaced by their values
+     * @param array<int,string> $originalArguments list of original arguments
      */
-    public function execute(array $arguments, array $originalArguments)
+    public function execute(array $arguments, array $originalArguments): string
     {
         // Remove arguments that contain empty tags
-        $arguments = array_filter($arguments, function($item) {
-            return  (mb_strpos($item, $this->tagReplacer->getEmptyTag()) === false);
-        });
+        $arguments = array_filter($arguments, fn ($item): bool => mb_strpos((string) $item, $this->tagReplacer->getEmptyTag()) === false);
 
-        if (count($arguments) === 0) {
+        if ($arguments === []) {
             return TagReplacer::EMPTY_TAG;
         }
-        
+
         $seed = array_shift($arguments);
-        $twister = new \mersenne_twister\twister(md5($seed));
-        $key = $twister->rangeint(0, sizeof($arguments) - 1);
+        $twister = new twister(md5((string) $seed));
+        $key = $twister->rangeint(0, count($arguments) - 1);
 
         return $arguments[$key];
     }

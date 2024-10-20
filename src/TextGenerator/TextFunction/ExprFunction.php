@@ -2,6 +2,9 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use InvalidArgumentException;
+use Exception;
+use Error;
 use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 use Neveldo\TextGenerator\ExpressionLanguage\ExpressionLanguage;
@@ -15,43 +18,32 @@ use Neveldo\TextGenerator\ExpressionLanguage\ExpressionLanguage;
  */
 class ExprFunction implements FunctionInterface
 {
-    /**
-     * @var TagReplacerInterface Tag Replacer service
-     */
-    private $tagReplacer;
-
-    /**
-     * ExprFunction constructor.
-     * @param TagReplacerInterface $tagReplacer
-     */
-    public function __construct(TagReplacerInterface $tagReplacer)
+    public function __construct(private readonly TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tagReplacer;
     }
 
     /**
      * Handle Expr function
-     * @param array $arguments list of arguments where tags have been replaced by their values
-     * @param array $originalArguments list of original arguments
+     * @param array<int,string> $arguments list of arguments where tags have been replaced by their values
+     * @param array<int,string> $originalArguments list of original arguments
      * @return string
      * @throw InvalidArgumentException if the number of arguments is not valid
      */
-    public function execute(array $arguments, array $originalArguments)
+    public function execute(array $arguments, array $originalArguments): string
     {
         if (count($arguments) !== 1) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf("ExprFunction expect exactly one parameter, %d given.", count($arguments))
             );
         }
 
         try {
+            /** @phpstan-ignore return.type */
             return (new ExpressionLanguage())->evaluate(
                 $this->tagReplacer->sanitizeTagNames($originalArguments[0]),
                 $this->tagReplacer->getTags()
             );
-        } catch (\Exception $e) {
-            return TagReplacer::EMPTY_TAG;
-        }  catch (\Error $e) {
+        } catch (Exception|Error) {
             return TagReplacer::EMPTY_TAG;
         }
     }

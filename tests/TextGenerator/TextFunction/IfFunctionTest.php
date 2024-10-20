@@ -2,48 +2,54 @@
 
 namespace Neveldo\TextGenerator\Tag;
 
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Neveldo\TextGenerator\TextFunction\IfFunction;
 
-class IfFunctionTest extends \PHPUnit\Framework\TestCase
+class IfFunctionTest extends TestCase
 {
-    public function setUp() {
+    private TagReplacer $tagReplacer;
+    private IfFunction $ifFunction;
+
+    public function setUp(): void
+    {
         $this->tagReplacer = new TagReplacer();
-        $this->function = new IfFunction($this->tagReplacer);
+        $this->ifFunction = new IfFunction($this->tagReplacer);
     }
 
-    public function testWithZeroArgument()
+    public function testWithZeroArgument(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->function->execute([], []);
+        $this->expectException(InvalidArgumentException::class);
+        $this->ifFunction->execute([], []);
     }
 
-    public function testWithOneArgument()
+    public function testWithOneArgument(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->function->execute([''], ['']);
+        $this->expectException(InvalidArgumentException::class);
+        $this->ifFunction->execute([''], ['']);
     }
 
-    public function testConditionTrue()
+    public function testConditionTrue(): void
     {
-        $result = $this->function->execute(['2 > 1', 'ok', 'notok'], ['2 > 1', 'ok', 'notok']);
+        $result = $this->ifFunction->execute(['2 > 1', 'ok', 'notok'], ['2 > 1', 'ok', 'notok']);
         $this->assertEquals('ok', $result);
     }
 
-    public function testConditionFalse()
+    public function testConditionFalse(): void
     {
-        $result = $this->function->execute(['2 < 1', 'ok', 'notok'], ['2 < 1', 'ok', 'notok']);
+        $result = $this->ifFunction->execute(['2 < 1', 'ok', 'notok'], ['2 < 1', 'ok', 'notok']);
         $this->assertEquals('notok', $result);
     }
 
-    public function testConditionTrueWithNoElse()
+    public function testConditionTrueWithNoElse(): void
     {
-        $result = $this->function->execute(['2 > 1', 'ok'], ['2 > 1', 'ok']);
+        $result = $this->ifFunction->execute(['2 > 1', 'ok'], ['2 > 1', 'ok']);
         $this->assertEquals('ok', $result);
     }
 
-    public function testConditionFalseWithNoElse()
+    public function testConditionFalseWithNoElse(): void
     {
-        $result = $this->function->execute(['2 < 1', 'ok'], ['2 < 1', 'ok']);
+        $result = $this->ifFunction->execute(['2 < 1', 'ok'], ['2 < 1', 'ok']);
         $this->assertEquals('[EMPTY]', $result);
     }
 }

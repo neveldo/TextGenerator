@@ -11,52 +11,46 @@ interface TagReplacerInterface
 {
     /**
      * Initialize the tags list
-     * @param array $tags, format : ['tag_name' => 'value', ...]
+     * @param array<string, string|array<int,array<string,string>>> $tags, format : ['tag_name' => 'value', ...]
      */
-    public function setTags(array $tags);
+    public function setTags(array $tags): void;
 
     /**
      * Add a tag to the collection
-     * @param string $name the tag name
-     * @param string $value the tag value
+     * @param string|array<int,array<string,string>> $value
      */
-    public function addTag($name, $value);
+    public function addTag(string $name, string|array $value): void;
 
     /**
      * Replace tags by the matching values within the content
-     * @param string $content
-     * @return string
      */
-    public function replace($content);
+    public function replace(string $content): string;
 
     /**
      * Replace tags by the matching sanitized tag names
-     * @param string $content
-     * @return string
      */
-    public function sanitizeTagNames($content);
+    public function sanitizeTagNames(string $content): string;
 
     /**
-     * Return a tag by its name
-     * @param $name
-     * @return string|array
+     * Return a tag by its name. ex : '@tag_name'
+     * @return string|array<int,array<string,string>>|null
      */
-    public function getTag($name);
+    public function getTag(string $name): string|array|null;
 
     /**
      * Return the array of available tags
-     * @return array
+     * @return array<string,string|array<int,array<string,string>>>
      */
-    public function getTags();
+    public function getTags(): array;
 
     /**
      * Return the array of escaped tags
-     * @return array
+     * @return array<string, string>
      */
-    public function getEscapedTags();
+    public function getEscapedTags(): array;
 
     /**
      * @return string the empty tag
      */
-    public function getEmptyTag();
+    public function getEmptyTag(): string;
 }
