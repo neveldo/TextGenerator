@@ -31,31 +31,31 @@ $data = [
         'firstname' => 'Leonardo',
         'lastname' => 'DiCaprio',
         'birthdate' => 'November 11, 1974',
-        'age' => 41,
+        'age' => '41',
         'sex' => 'm',
         'nationality' => 'American',
         'birth_city' => 'Hollywood',
         'birth_country' => 'US',
-        'awards_number' => 1,
-        'nominations_number' => 6,
-        'movies_number' => 37,
+        'awards_number' => '1',
+        'nominations_number' => '6',
+        'movies_number' => '37',
         'first_movie_name' => 'Critters 3',
-        'first_movie_year' => 1991,
+        'first_movie_year' => '1991',
         'famous_movie_name' => 'Titanic',
-        'famous_movie_year' => 1997,
+        'famous_movie_year' => '1997',
         'famous_movie_earn' => '2185372302',
         'other_famous_movies' => [
             [
                 'name' => 'Catch Me If You Can',
-                'year' => 2002
+                'year' => '2002'
             ],
             [
                 'name' => 'Shutter Island',
-                'year' => 2010
+                'year' => '2010'
             ],
             [
                 'name' => 'Inception',
-                'year' => 2010
+                'year' => '2010'
             ],
         ]
     ],
@@ -63,31 +63,31 @@ $data = [
         'firstname' => 'Jodie',
         'lastname' => 'Foster',
         'birthdate' => 'November 19, 1962',
-        'age' => 51,
+        'age' => '51',
         'sex' => 'f',
         'nationality' => 'American',
         'birth_city' => 'Los Angeles',
         'birth_country' => 'US',
-        'awards_number' => 2,
-        'nominations_number' => 4,
-        'movies_number' => 75,
+        'awards_number' => '2',
+        'nominations_number' => '4',
+        'movies_number' => '75',
         'first_movie_name' => 'My Sister Hank',
-        'first_movie_year' => 1972,
+        'first_movie_year' => '1972',
         'famous_movie_name' => 'Taxi Driver',
-        'famous_movie_year' => 1976,
+        'famous_movie_year' => '1976',
         'famous_movie_earn' => '28262574',
         'other_famous_movies' => [
             [
                 'name' => 'The Silence of the Lambs',
-                'year' => 1991
+                'year' => '1991'
             ],
             [
                 'name' => 'Contact',
-                'year' => null // Empty values are skipped by the parser
+                'year' => '' // Empty values are skipped by the parser
             ],
             [
                 'name' => 'The Accused',
-                'year' => 1988
+                'year' => '1988'
             ],
         ]
     ],

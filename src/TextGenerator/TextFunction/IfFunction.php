@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use InvalidArgumentException;
 use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 use Neveldo\TextGenerator\ExpressionLanguage\ExpressionLanguage;
@@ -22,43 +23,31 @@ use Neveldo\TextGenerator\ExpressionLanguage\ExpressionLanguage;
  */
 class IfFunction implements FunctionInterface
 {
-    /**
-     * @var TagReplacerInterface Tag Replacer service
-     */
-    private $tagReplacer;
-
-    /**
-     * IfFunction constructor.
-     * @param TagReplacerInterface $tagReplacer
-     */
-    public function __construct(TagReplacerInterface $tagReplacer)
+    public function __construct(private readonly TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tagReplacer;
     }
 
     /**
      * Handle If function
-     * @param array $arguments list of arguments where tags have been replaced by their values
-     * @param array $originalArguments list of original arguments
+     * @param array<int,string> $arguments list of arguments where tags have been replaced by their values
+     * @param array<int,string> $originalArguments list of original arguments
      * @return string
      * @throw InvalidArgumentException if the number of arguments is not valid
      */
-    public function execute(array $arguments, array $originalArguments)
+    public function execute(array $arguments, array $originalArguments): string
     {
         if (count($arguments) !== 2 && count($arguments) !== 3) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf("IfFunction expect exactly two (condition, then statement) or three (condition, then statement, else statement) parameters, %d given.", count($arguments))
             );
         }
 
-        $language = new ExpressionLanguage();
+        $expressionLanguage = new ExpressionLanguage();
 
-        if ($language->evaluate($this->tagReplacer->sanitizeTagNames($originalArguments[0]), $this->tagReplacer->getTags())) {
+        if ($expressionLanguage->evaluate($this->tagReplacer->sanitizeTagNames($originalArguments[0]), $this->tagReplacer->getTags())) {
             return $arguments[1];
-        } else if (isset($arguments[2])) {
-            return $arguments[2];
         }
-        return TagReplacer::EMPTY_TAG;
+        return $arguments[2] ?? TagReplacer::EMPTY_TAG;
     }
 
 }

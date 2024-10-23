@@ -12,29 +12,19 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
  */
 class CoalesceFunction implements FunctionInterface
 {
-    /**
-     * @var TagReplacerInterface Tag Replacer service
-     */
-    private $tagReplacer;
-
-    /**
-     * ChooseFunction constructor.
-     * @param TagReplacerInterface $tagReplacer
-     */
-    public function __construct(TagReplacerInterface $tagReplacer)
+    public function __construct(private readonly TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tagReplacer;
     }
 
     /**
      * Handle coalesce function
-     * @param array $arguments list of arguments where tags have been replaced by their values
-     * @param array $originalArguments list of original arguments
+     * @param array<int,string> $arguments list of arguments where tags have been replaced by their values
+     * @param array<int,string> $originalArguments list of original arguments
      * @return string
      */
-    public function execute(array $arguments, array $originalArguments)
+    public function execute(array $arguments, array $originalArguments): string
     {
-        foreach($arguments as $argument) {
+        foreach ($arguments as $argument) {
             if ($argument !== $this->tagReplacer->getEmptyTag()
                 && $argument !== null
                 && $argument !== ''

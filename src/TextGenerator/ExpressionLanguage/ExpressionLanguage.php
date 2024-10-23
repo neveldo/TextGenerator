@@ -3,9 +3,9 @@
 namespace Neveldo\TextGenerator\ExpressionLanguage;
 
 /**
- * Class TagReplacerInterface
+ * Class ExpressionLanguage
  * Handle tags replacement within a text
- * @package Neveldo\TextGenerator\Tag
+ * @package Neveldo\TextGenerator\ExpressionLanguage
  */
 class ExpressionLanguage extends \Symfony\Component\ExpressionLanguage\ExpressionLanguage
 {

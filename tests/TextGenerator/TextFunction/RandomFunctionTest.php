@@ -2,36 +2,41 @@
 
 namespace Neveldo\TextGenerator\Tag;
 
+use PHPUnit\Framework\TestCase;
 use Neveldo\TextGenerator\TextFunction\RandomFunction;
 
-class RandomFunctionTest extends \PHPUnit\Framework\TestCase
+class RandomFunctionTest extends TestCase
 {
-    public function setUp() {
+    private TagReplacer $tagReplacer;
+    private RandomFunction $randomFunction;
+
+    public function setUp(): void
+    {
         $this->tagReplacer = new TagReplacer();
-        $this->function = new RandomFunction($this->tagReplacer);
+        $this->randomFunction = new RandomFunction($this->tagReplacer);
     }
 
-    public function testWithZeroArgument()
+    public function testWithZeroArgument(): void
     {
-        $result = $this->function->execute([], []);
+        $result = $this->randomFunction->execute([], []);
         $this->assertEquals('[EMPTY]', $result);
     }
 
-    public function testWithOneArgument()
+    public function testWithOneArgument(): void
     {
-        $result = $this->function->execute(['test'], ['test']);
+        $result = $this->randomFunction->execute(['test'], ['test']);
         $this->assertEquals('test', $result);
     }
 
-    public function testWithTwoArguments()
+    public function testWithTwoArguments(): void
     {
-        $result = $this->function->execute(['test1', 'test2'], ['test1', 'test2']);
+        $result = $this->randomFunction->execute(['test1', 'test2'], ['test1', 'test2']);
         $this->assertContains($result, ['test1', 'test2']);
     }
 
-    public function testWithStringThatContainsEmptyTag()
+    public function testWithStringThatContainsEmptyTag(): void
     {
-        $result = $this->function->execute(['test1' . $this->tagReplacer->getEmptyTag(), 'test2'], ['test1' . $this->tagReplacer->getEmptyTag(), 'test2']);
+        $result = $this->randomFunction->execute(['test1' . $this->tagReplacer->getEmptyTag(), 'test2'], ['test1' . $this->tagReplacer->getEmptyTag(), 'test2']);
         $this->assertEquals('test2', $result);
     }
 }

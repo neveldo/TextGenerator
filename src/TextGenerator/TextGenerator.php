@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator;
 
+use InvalidArgumentException;
 use Neveldo\TextGenerator\TextFunction\ChooseFunction;
 use Neveldo\TextGenerator\TextFunction\CoalesceFunction;
 use Neveldo\TextGenerator\TextFunction\ExprFunction;
@@ -11,7 +12,7 @@ use Neveldo\TextGenerator\TextFunction\IfFunction;
 use Neveldo\TextGenerator\TextFunction\LoopFunction;
 use Neveldo\TextGenerator\TextFunction\ProbabilityRandomFunction;
 use Neveldo\TextGenerator\TextFunction\RandomFunction;
-use Neveldo\TextGenerator\TextFunction\ReproducableRandomFunction;	
+use Neveldo\TextGenerator\TextFunction\ReproducableRandomFunction;
 use Neveldo\TextGenerator\TextFunction\RmnaFunction;
 use Neveldo\TextGenerator\TextFunction\SetFunction;
 use Neveldo\TextGenerator\TextFunction\ShuffleFunction;
@@ -28,36 +29,24 @@ class TextGenerator
     /**
      * @var FunctionInterface[] collection of function
      */
-    private $functions = [];
+    private array $functions = [];
 
-    /**
-     * @var TagReplacerInterface
-     */
-    private $tagReplacer;
-
-    /**
-     * @var string the template to handle
-     */
-    private $template;
+    private TagReplacerInterface $tagReplacer;
 
     /**
      * @var string the compiled template
      */
-    private $compiledTemplate;
+    private string $compiledTemplate;
 
     /**
-     * @var array sorted execution stack to run for generating a text
+     * @var array<int, array{'id': int, 'function': string, 'parent': int|null, 'next': int, 'prev': int}> sorted execution stack to run for generating a text
      */
-    private $executionStack = [];
+    private array $executionStack = [];
 
-    /**
-     * TextGenerator constructor.
-     * @param TagReplacerInterface|null $tagReplacer
-     */
     public function __construct(TagReplacerInterface $tagReplacer = null)
     {
         // Init the tag replacer
-        if ($tagReplacer === null) {
+        if (!$tagReplacer instanceof TagReplacerInterface) {
             $tagReplacer = new TagReplacer();
         }
         $this->tagReplacer = $tagReplacer;
@@ -81,13 +70,13 @@ class TextGenerator
 
     /**
      * Generate an automated text from data
-     * @param array $data that will feed the tags within the template
+     * @param array<string, string|array<int,array<string,string>>> $data that will feed the tags within the template
      * @return string the generated text
      * @throw Exception
      */
-    public function generate(array $data)
+    public function generate(array $data): string
     {
-        if ($this->compiledTemplate === null) {
+        if ($this->compiledTemplate === '') {
             return '';
         }
 
@@ -97,7 +86,7 @@ class TextGenerator
 
         // Execute the functions stack starting with the deepest functions and ending
         // with the shallowest ones
-        foreach($this->executionStack as $statement) {
+        foreach ($this->executionStack as $statement) {
 
             $openingTag = '[' . $statement['id'] . ']';
             $closingTag =  '[/' . $statement['id'] . ']';
@@ -116,8 +105,8 @@ class TextGenerator
             $text = $this->substringReplace(
                 $text,
                 $this->getFunction($statement['function'])->execute($parsedArguments, $originalArguments),
-                mb_strpos($text, $openingTag),
-                mb_strpos($text, $closingTag) + mb_strlen($closingTag) - mb_strpos($text, $openingTag)
+                (int) mb_strpos($text, $openingTag),
+                (int) mb_strpos($text, $closingTag) + mb_strlen($closingTag) - mb_strpos($text, $openingTag)
             );
         }
 
@@ -133,13 +122,8 @@ class TextGenerator
     /**
      * substr_replace that works with multibytes strings
      * @see http://php.net/manual/en/function.substr-replace.php
-     * @param $str
-     * @param $replacement
-     * @param $start
-     * @param $length
-     * @return string
      */
-    protected function substringReplace($str, $replacement, $start, $length)
+    protected function substringReplace(string $str, string $replacement, int $start, int $length): string
     {
         return mb_substr($str, 0, $start) . $replacement . mb_substr($str, $start + $length);
     }
@@ -147,13 +131,10 @@ class TextGenerator
     /**
      * Prepare the template by parsing the function calls within it
      * @param string $template The template to compile
-     * @return $this
      * @throw \InvalidArgumentException if the template contains unknown functions
      */
-    public function compile($template)
+    public function compile(string $template): static
     {
-        $this->template = $template;
-
         $template = $this->parseIndentations($template);
         $data = $this->compileTemplate($template);
 
@@ -165,13 +146,12 @@ class TextGenerator
 
     /**
      * Sort the function calls tree from left to right and from bottom to up
-     * @param array $statements
-     * @param null|int $parent parent statement ID
-     * @return array
+     * @param array<int, array{'id': int, 'function': string, 'parent': int|null}> $statements
+     * @return array<int, array{'id': int, 'function': string, 'parent': int|null, 'next': int, 'prev': int}>
      */
-    public function getSortedStatements(array $statements, $parent = null): array
+    public function getSortedStatements(array $statements): array
     {
-        if (count($statements) === 0) {
+        if ($statements === []) {
             return [];
         }
 
@@ -211,28 +191,25 @@ class TextGenerator
             $statement = $linkedStatements[$statement['next']];
             $sortedStatements[] = $statement;
         }
-
+        /** @phpstan-ignore return.type */
         return $sortedStatements;
     }
 
     /**
-     * Remove the ;; followed by any space characters from the
-     * template
-     * @param string $template
-     * @return string
+     * Remove the ;; followed by any space characters from the template
      */
-    public function parseIndentations($template)
+    public function parseIndentations(string $template): string
     {
-        return preg_replace('/;;\s+/m', '', $template);
+        return (string) preg_replace('/;;\s+/m', '', $template);
     }
 
     /**
      * Parse the template to compute the execution stack
      * @param string $template
-     * @return array Array that contains compiledTemplate and executionStack outputs
+     * @return array{'compiledTemplate': string, 'executionStack': array<int, array{'id': int, 'function': string, 'parent': int|null}>} Array that contains compiledTemplate and executionStack outputs
      * @throw \InvalidArgumentException if the template contains unknown functions
      */
-    protected function compileTemplate($template)
+    protected function compileTemplate(string $template): array
     {
         $beginFunctionChar = '#';
         $beginArgsChar = '{';
@@ -242,7 +219,9 @@ class TextGenerator
         $template = preg_split('//u', $template, -1, PREG_SPLIT_NO_EMPTY);
 
         $compiledTemplate = '';
+        /** @®var array<int, array{'id': int, 'function': string, 'parent': int|null}> */
         $executionStack = [];
+        /** @var array<int,int> */
         $unclosedFunctionsStack = [];
 
         $callingFunction = false;
@@ -252,7 +231,7 @@ class TextGenerator
         $currentCharIndex = 0;
         $currentStackIndex = 0;
 
-        while(!$parsingEnded) {
+        while (!$parsingEnded) {
             if (!isset($template[$currentCharIndex])) {
                 $parsingEnded = true;
                 continue;
@@ -263,13 +242,13 @@ class TextGenerator
                 if ($template[$currentCharIndex] === $beginArgsChar && mb_strlen($callingFunctionName) !== 0) {
                     // End of function name
                     if (!in_array($callingFunctionName, array_keys($this->functions))) {
-                        throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $callingFunctionName));
+                        throw new InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $callingFunctionName));
                     }
 
                     $compiledTemplate .= '[' . $currentStackIndex . ']';
 
                     $parent = null;
-                    if (count($unclosedFunctionsStack) !== 0) {
+                    if ($unclosedFunctionsStack !== []) {
                         $parent = $unclosedFunctionsStack[count($unclosedFunctionsStack) - 1];
                     }
 
@@ -294,21 +273,19 @@ class TextGenerator
                     $callingFunction = false;
                     $callingFunctionName = '';
                 }
-            } else {
-                if ($template[$currentCharIndex] === $beginFunctionChar) {
-                    // Begin of new function call
-                    $callingFunction = true;
-                    $callingFunctionName = '';
-                } elseif ($template[$currentCharIndex] === $endArgsChar) {
-                    // End of function call
-                    if (($lastUnclosedFunction = array_pop($unclosedFunctionsStack)) !== null) {
-                        $compiledTemplate .= '[/' . $lastUnclosedFunction . ']';
-                    } else {
-                        $compiledTemplate .= $template[$currentCharIndex];
-                    }
+            } elseif ($template[$currentCharIndex] === $beginFunctionChar) {
+                // Begin of new function call
+                $callingFunction = true;
+                $callingFunctionName = '';
+            } elseif ($template[$currentCharIndex] === $endArgsChar) {
+                // End of function call
+                if (($lastUnclosedFunction = array_pop($unclosedFunctionsStack)) !== null) {
+                    $compiledTemplate .= '[/' . $lastUnclosedFunction . ']';
                 } else {
                     $compiledTemplate .= $template[$currentCharIndex];
                 }
+            } else {
+                $compiledTemplate .= $template[$currentCharIndex];
             }
             $currentCharIndex++;
         }
@@ -325,7 +302,7 @@ class TextGenerator
      * @param FunctionInterface $function The text function
      * @return $this
      */
-    public function registerFunction($name, FunctionInterface $function)
+    public function registerFunction(string $name, FunctionInterface $function): static
     {
         $this->functions[$name] = $function;
         return $this;
@@ -333,24 +310,22 @@ class TextGenerator
 
     /**
      * Get a function from its name
-     * @param $name
      * @return FunctionInterface
      * @throw \InvalidArgumentException if the function doesn't exist
      */
-    public function getFunction($name)
+    public function getFunction(string $name): FunctionInterface
     {
         if (!array_key_exists($name, $this->functions)) {
-            throw new \InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $name));
+            throw new InvalidArgumentException(sprintf("Error : function '%s' doesn't exist.", $name));
         }
         return $this->functions[$name];
     }
 
     /**
      * Set the tag replacer
-     * @param TagReplacerInterface $tagReplacer
      * @return $this
      */
-    public function setTagReplacer(TagReplacerInterface $tagReplacer)
+    public function setTagReplacer(TagReplacerInterface $tagReplacer): static
     {
         $this->tagReplacer = $tagReplacer;
         return $this;
@@ -365,24 +340,18 @@ class TextGenerator
         return $this->tagReplacer;
     }
 
-    /**
-     * @return string
-     */
     public function getCompiledTemplate(): string
     {
         return $this->compiledTemplate;
     }
 
-    /**
-     * @param string $compiledTemplate
-     */
     public function setCompiledTemplate(string $compiledTemplate): void
     {
         $this->compiledTemplate = $compiledTemplate;
     }
 
     /**
-     * @return array
+     * @return array<int, array{'id': int, 'function': string, 'parent': int|null, 'next': int, 'prev': int}> sorted execution stack to run for generating a text
      */
     public function getExecutionStack(): array
     {
@@ -390,7 +359,7 @@ class TextGenerator
     }
 
     /**
-     * @param array $executionStack
+     * @param array<int, array{'id': int, 'function': string, 'parent': int|null, 'next': int, 'prev': int}> $executionStack sorted execution stack to run for generating a text
      */
     public function setExecutionStack(array $executionStack): void
     {

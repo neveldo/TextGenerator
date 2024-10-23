@@ -46,13 +46,14 @@ if ($output['error'] === '') {
     $textGenerator->compile($_POST['template']);
 
     try {
-        $data = json_decode($_POST['data'], true);
+        /** @var array<array<string>> */
+        $data = json_decode((string) $_POST['data'], true);
 
         foreach($data as $row) {
             $output['result'][] = $textGenerator->generate($row);
         }
 
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
         $output['error'] = $e->getMessage();
     }
 }

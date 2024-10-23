@@ -2,48 +2,54 @@
 
 namespace Neveldo\TextGenerator\Tag;
 
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Neveldo\TextGenerator\TextFunction\FilterFunction;
 
-class FilterFunctionTest extends \PHPUnit\Framework\TestCase
+class FilterFunctionTest extends TestCase
 {
-    public function setUp() {
+    private TagReplacer $tagReplacer;
+    private FilterFunction $filterFunction;
+
+    public function setUp(): void
+    {
         $this->tagReplacer = new TagReplacer();
-        $this->function = new FilterFunction($this->tagReplacer);
+        $this->filterFunction = new FilterFunction($this->tagReplacer);
     }
 
-    public function testWithZeroArgument()
+    public function testWithZeroArgument(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->function->execute([], []);
+        $this->expectException(InvalidArgumentException::class);
+        $this->filterFunction->execute([], []);
     }
 
-    public function testWithOneArgument()
+    public function testWithOneArgument(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->function->execute(['round'], ['round']);
+        $this->expectException(InvalidArgumentException::class);
+        $this->filterFunction->execute(['round'], ['round']);
     }
 
-    public function testRound()
+    public function testRound(): void
     {
-        $result = $this->function->execute(['round', '3.44444'], ['round', '3.44444']);
+        $result = $this->filterFunction->execute(['round', '3.44444'], ['round', '3.44444']);
         $this->assertEquals(3, $result);
     }
 
-    public function testRound2()
+    public function testRound2(): void
     {
-        $result = $this->function->execute(['round', '3.44444', 1], ['round', '3.44444', 1]);
+        $result = $this->filterFunction->execute(['round', '3.44444', '1'], ['round', '3.44444', '1']);
         $this->assertEquals(3.4, $result);
     }
 
-    public function testUnexistantFilter()
+    public function testUnexistantFilter(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $result = $this->function->execute(['unexistant', '3.44444', 1], ['unexistant', '3.44444', 1]);
+        $this->expectException(InvalidArgumentException::class);
+        $this->filterFunction->execute(['unexistant', '3.44444', '1'], ['unexistant', '3.44444', '1']);
     }
 
-    public function testTooManyParams()
+    public function testTooManyParams(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $result = $this->function->execute(['round', '3.44444', 1, '3.44444', 1, '3.44444', 1, '3.44444', 1], ['round', '3.44444', 1, '3.44444', 1, '3.44444', 1, '3.44444', 1]);
+        $this->expectException(InvalidArgumentException::class);
+        $this->filterFunction->execute(['round', '3.44444', '1', '3.44444', '1', '3.44444', '1', '3.44444', '1'], ['round', '3.44444', '1', '3.44444', '1', '3.44444', '1', '3.44444', '1']);
     }
 }

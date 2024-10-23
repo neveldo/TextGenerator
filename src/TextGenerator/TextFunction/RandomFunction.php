@@ -15,33 +15,21 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
  */
 class RandomFunction implements FunctionInterface
 {
-    /**
-     * @var TagReplacerInterface Tag Replacer service
-     */
-    private $tagReplacer;
-
-    /**
-     * RandomFunction constructor.
-     * @param TagReplacerInterface $tagReplacer
-     */
-    public function __construct(TagReplacerInterface $tagReplacer)
+    public function __construct(private readonly TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tagReplacer;
     }
 
     /**
      * Handle Random function
-     * @param array $arguments list of arguments where tags have been replaced by their values
-     * @param array $originalArguments list of original arguments
+     * @param array<int,string> $arguments list of arguments where tags have been replaced by their values
+     * @param array<int,string> $originalArguments list of original arguments
      */
-    public function execute(array $arguments, array $originalArguments)
+    public function execute(array $arguments, array $originalArguments): string
     {
         // Remove arguments that contain empty tags
-        $arguments = array_filter($arguments, function($item) {
-            return  (mb_strpos($item, $this->tagReplacer->getEmptyTag()) === false);
-        });
+        $arguments = array_filter($arguments, fn ($item): bool => mb_strpos((string) $item, $this->tagReplacer->getEmptyTag()) === false);
 
-        if (count($arguments) === 0) {
+        if ($arguments === []) {
             return TagReplacer::EMPTY_TAG;
         }
 

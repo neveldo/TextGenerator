@@ -5,7 +5,7 @@ namespace Neveldo\TextGenerator\TextFunction;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
 /**
- * Class c
+ * Class RmnaFunction
  * 'rmna' function : return the argument only if it does not contain any empty values
  * Examples :
  * #rmna{one @possible_not_available_tag two}
@@ -14,29 +14,19 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
  */
 class RmnaFunction implements FunctionInterface
 {
-    /**
-     * @var TagReplacerInterface Tag Replacer service
-     */
-    private $tagReplacer;
-
-    /**
-     * RandomFunction constructor.
-     * @param TagReplacerInterface $tagReplacer
-     */
-    public function __construct(TagReplacerInterface $tagReplacer)
+    public function __construct(private readonly TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tagReplacer;
     }
 
     /**
      * Handle rmna function
-     * @param array $arguments list of arguments where tags have been replaced by their values
-     * @param array $originalArguments list of original arguments
+     * @param array<int,string> $arguments list of arguments where tags have been replaced by their values
+     * @param array<int,string> $originalArguments list of original arguments
      */
-    public function execute(array $arguments, array $originalArguments)
+    public function execute(array $arguments, array $originalArguments): string
     {
-        if (count($arguments) === 0
-            || mb_strpos($arguments[0], $this->tagReplacer->getEmptyTag()) !== false
+        if ($arguments === []
+            || mb_strpos((string) $arguments[0], $this->tagReplacer->getEmptyTag()) !== false
         ) {
             return '';
         }

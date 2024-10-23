@@ -12,107 +12,98 @@ class TagReplacer implements TagReplacerInterface
     /**
      * @const string the empty tag
      */
-    const EMPTY_TAG = '[EMPTY]';
+    public const EMPTY_TAG = '[EMPTY]';
 
     /**
-     * @var array tags, format : ['tag_name' => 'value', ...]
+     * @var array<string, string|array<int,array<string,string>>> tags, format : ['tag_name' => 'value', ...]
      */
-    private $tags = [];
+    private array $tags = [];
 
     /**
-     * @var array escaped tags to use for text replacement
+     * @var array<string,string> escaped tags to use for text replacement
      * format : ['@tag_name' => 'value', ...]
      */
-    private $escapedTags = [];
+    private array $escapedTags = [];
 
     /**
-     * @var array reversed tags to use for text replacement
+     * @var array<string,string> reversed tags to use for text replacement
      * format : ['@tag_name' => 'tag_name', ...]
      */
-    private $sanitizedTagNames = [];
+    private array $sanitizedTagNames = [];
 
     /**
      * Initialize the tags list
-     * @param array $tags, format : ['tag_name' => 'value', ...]
+     * @param array<string, string|array<int,array<string,string>>> $tags, format : ['tag_name' => 'value', ...]
      */
-    public function setTags(array $tags)
+    public function setTags(array $tags): void
     {
         $this->tags = $this->escapedTags = [];
 
-        foreach($tags as $name => $value) {
+        foreach ($tags as $name => $value) {
             $this->addTag($name, $value);
         }
     }
 
     /**
      * Add a tag to the collection
-     * @param string $name the tag name
-     * @param string $value the tag value
+     * @param string|array<int,array<string,string>> $value
      */
-    public function addTag($name, $value)
+    public function addTag(string $name, string|array $value): void
     {
         $this->tags[$name] = $value;
         $this->sanitizedTagNames['@' . $name] = $name;
 
         // Replace empty values by [EMPTY_TAG] in order to be able to remove easily
         // the parts that contains this tag later to avoid inconsistent sentences
-        if ($value === null || $value === '') {
+        if ($value === '') {
             $value = $this->getEmptyTag();
         }
 
-        if (is_scalar($value)) {
+        if (is_string($value)) {
             $this->escapedTags['@' . $name] = $value;
         }
     }
 
     /**
      * Replace tags by the matching values within the content
-     * @param string $content
-     * @return string
      */
-    public function replace($content)
+    public function replace(string $content): string
     {
         return strtr($content, $this->escapedTags);
     }
 
     /**
      * Replace tags by the matching sanitized tag names
-     * @param string $content
-     * @return string
      */
-    public function sanitizeTagNames($content)
+    public function sanitizeTagNames(string $content): string
     {
         return strtr($content, $this->sanitizedTagNames);
     }
 
     /**
-     * Return a tag by its name
-     * @param $name ex : '@tag_name'
-     * @return string|array
+     * Return a tag by its name. ex : '@tag_name'
+     * @return string|array<int,array<string,string>>|null
      */
-    public function getTag($name)
+    public function getTag(string $name): string|array|null
     {
-        $name = mb_substr($name, 1);
-        if (isset($this->tags[$name])) {
-            return $this->tags[$name];
-        }
-        return null;
+        $name = mb_substr((string) $name, 1);
+        return $this->tags[$name] ?? null;
     }
 
     /**
      * Return the array of available tags
-     * @return array
+     * @return array<string,string|array<int,array<string,string>>>
      */
-    public function getTags()
+    public function getTags(): array
     {
         return $this->tags;
     }
 
     /**
      * Return the array of escaped tags
-     * @return array
+     * @return array<string, string>
      */
-    public function getEscapedTags()
+    public function getEscapedTags(): array
     {
         return $this->escapedTags;
     }
@@ -120,7 +111,8 @@ class TagReplacer implements TagReplacerInterface
     /**
      * @return string the empty tag
      */
-    public function getEmptyTag() {
+    public function getEmptyTag(): string
+    {
         return self::EMPTY_TAG;
     }
 }

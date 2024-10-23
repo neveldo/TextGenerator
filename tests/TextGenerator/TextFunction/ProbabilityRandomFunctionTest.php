@@ -2,66 +2,72 @@
 
 namespace Neveldo\TextGenerator\Tag;
 
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Neveldo\TextGenerator\TextFunction\ProbabilityRandomFunction;
 
-class ProbabilityRandomFunctionTest extends \PHPUnit\Framework\TestCase
+class ProbabilityRandomFunctionTest extends TestCase
 {
-    public function setUp() {
+    private TagReplacer $tagReplacer;
+    private ProbabilityRandomFunction $probabilityRandomFunction;
+
+    public function setUp(): void
+    {
         $this->tagReplacer = new TagReplacer();
-        $this->function = new ProbabilityRandomFunction($this->tagReplacer);
+        $this->probabilityRandomFunction = new ProbabilityRandomFunction($this->tagReplacer);
     }
 
-    public function testWithZeroArgument()
+    public function testWithZeroArgument(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->function->execute([], []);
+        $this->expectException(InvalidArgumentException::class);
+        $this->probabilityRandomFunction->execute([], []);
     }
 
-    public function testWithOneArgument()
+    public function testWithOneArgument(): void
     {
-        $result = $this->function->execute(['1:test'], ['1:test']);
+        $result = $this->probabilityRandomFunction->execute(['1:test'], ['1:test']);
         $this->assertEquals('test', $result);
     }
 
-    public function testWithTwoArguments()
+    public function testWithTwoArguments(): void
     {
-        $result = $this->function->execute(['2:test1', '8:test2'], ['2:test1', '8:test2']);
+        $result = $this->probabilityRandomFunction->execute(['2:test1', '8:test2'], ['2:test1', '8:test2']);
         $this->assertContains($result, ['test1', 'test2']);
     }
 
-    public function testWithStringThatContainsEmptyTag()
+    public function testWithStringThatContainsEmptyTag(): void
     {
-        $result = $this->function->execute(['9:test1' . $this->tagReplacer->getEmptyTag(), '1:test2'], ['9:test1' . $this->tagReplacer->getEmptyTag(), '1:test2']);
+        $result = $this->probabilityRandomFunction->execute(['9:test1' . $this->tagReplacer->getEmptyTag(), '1:test2'], ['9:test1' . $this->tagReplacer->getEmptyTag(), '1:test2']);
         $this->assertEquals('test2', $result);
     }
 
-    public function testWithStringThatContainsEmptyTag2()
+    public function testWithStringThatContainsEmptyTag2(): void
     {
-        $result = $this->function->execute(['9:test1' . $this->tagReplacer->getEmptyTag()], ['9:test1' . $this->tagReplacer->getEmptyTag()]);
+        $result = $this->probabilityRandomFunction->execute(['9:test1' . $this->tagReplacer->getEmptyTag()], ['9:test1' . $this->tagReplacer->getEmptyTag()]);
         $this->assertEquals('[EMPTY]', $result);
     }
 
-    public function testWithWrongProbabilities()
+    public function testWithWrongProbabilities(): void
     {
-        $result = $this->function->execute(['2:test1', 'test2'], ['2:test1', 'test2']);
+        $result = $this->probabilityRandomFunction->execute(['2:test1', 'test2'], ['2:test1', 'test2']);
         $this->assertContains($result, ['test1']);
     }
 
-    public function testWithWrongProbabilities2()
+    public function testWithWrongProbabilities2(): void
     {
-        $result = $this->function->execute(['test1', 'test2'], ['test1', 'test2']);
+        $result = $this->probabilityRandomFunction->execute(['test1', 'test2'], ['test1', 'test2']);
         $this->assertEquals('[EMPTY]', $result);
     }
 
-    public function testWithWrongProbabilities3()
+    public function testWithWrongProbabilities3(): void
     {
-        $result = $this->function->execute(['xx:test1', 'yy:test2'], ['xx:test1', 'yy:test2']);
+        $result = $this->probabilityRandomFunction->execute(['xx:test1', 'yy:test2'], ['xx:test1', 'yy:test2']);
         $this->assertEquals('[EMPTY]', $result);
     }
 
-    public function testWithWrongProbabilities4()
+    public function testWithWrongProbabilities4(): void
     {
-        $result = $this->function->execute(['-5:test1', '-8:test2'], ['-5:test1', '-8:test2']);
+        $result = $this->probabilityRandomFunction->execute(['-5:test1', '-8:test2'], ['-5:test1', '-8:test2']);
         $this->assertEquals('[EMPTY]', $result);
     }
 }

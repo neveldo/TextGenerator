@@ -2,30 +2,36 @@
 
 namespace Neveldo\TextGenerator\Tag;
 
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Neveldo\TextGenerator\TextFunction\ExprFunction;
 
-class ExprFunctionTest extends \PHPUnit\Framework\TestCase
+class ExprFunctionTest extends TestCase
 {
-    public function setUp() {
+    private TagReplacer $tagReplacer;
+    private ExprFunction $exprFunction;
+
+    public function setUp(): void
+    {
         $this->tagReplacer = new TagReplacer();
-        $this->function = new ExprFunction($this->tagReplacer);
+        $this->exprFunction = new ExprFunction($this->tagReplacer);
     }
 
-    public function testWithZeroArgument()
+    public function testWithZeroArgument(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->function->execute([], []);
+        $this->expectException(InvalidArgumentException::class);
+        $this->exprFunction->execute([], []);
     }
 
-    public function testWithTownArgument()
+    public function testWithTownArgument(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->function->execute(['', ''], ['', '']);
+        $this->expectException(InvalidArgumentException::class);
+        $this->exprFunction->execute(['', ''], ['', '']);
     }
 
-    public function testSimpleExpression()
+    public function testSimpleExpression(): void
     {
-        $result = $this->function->execute(['2 + 1'], ['2 + 1']);
+        $result = $this->exprFunction->execute(['2 + 1'], ['2 + 1']);
         $this->assertEquals('3', $result);
     }
 }

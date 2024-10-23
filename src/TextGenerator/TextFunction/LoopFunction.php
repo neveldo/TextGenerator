@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use InvalidArgumentException;
 use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
@@ -24,30 +25,19 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
  */
 class LoopFunction implements FunctionInterface
 {
-    /**
-     * @var TagReplacerInterface Tag Replacer service
-     */
-    private $tagReplacer;
-
-    /**
-     * LoopFunction constructor.
-     * @param TagReplacerInterface $tagReplacer
-     */
-    public function __construct(TagReplacerInterface $tagReplacer)
+    public function __construct(private readonly TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tagReplacer;
     }
 
     /**
-     * Handle Random function
-     * @param array $arguments list of arguments where tags have been replaced by their values
-     * @param array $originalArguments list of original arguments
-     * @return string
+     * Handle Loop function
+     * @param array<int,string> $arguments list of arguments where tags have been replaced by their values
+     * @param array<int,string> $originalArguments list of original arguments
      */
-    public function execute(array $arguments, array $originalArguments)
+    public function execute(array $arguments, array $originalArguments): string
     {
         if (count($arguments) !== 6) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf("Loop expect exactly six parameters, %d given.", count($arguments))
             );
         }
@@ -59,16 +49,14 @@ class LoopFunction implements FunctionInterface
         }
 
         $loopStrings = [];
-        foreach($loopData as $tags) {
+        foreach ($loopData as $tags) {
             $tagReplacer = clone $this->tagReplacer;
             $tagReplacer->setTags($tags);
             $loopStrings[] = $tagReplacer->replace($arguments[5]);
         }
 
         // Remove empty strings and arguments that contain empty tags
-        $loopStrings = array_filter($loopStrings, function($item) {
-            return  ($item !== '' && mb_strpos($item, $this->tagReplacer->getEmptyTag()) === false);
-        });
+        $loopStrings = array_filter($loopStrings, fn ($item): bool => $item !== '' && mb_strpos($item, $this->tagReplacer->getEmptyTag()) === false);
 
         // Parse argument 1 : number of items to loop on ('*' to loop on all elements)
         $limit = count($loopStrings);
@@ -78,7 +66,7 @@ class LoopFunction implements FunctionInterface
         }
 
         // Parse argument 2 : shuffle the items (true/false)
-        if (mb_strtolower($arguments[2]) === 'true') {
+        if (mb_strtolower((string) $arguments[2]) === 'true') {
             shuffle($loopStrings);
         }
 
@@ -91,7 +79,7 @@ class LoopFunction implements FunctionInterface
 
             if ($i < $limit - 2) {
                 $result .= $arguments[3];
-            } else if ($i < $limit - 1) {
+            } elseif ($i < $limit - 1) {
                 $result .= $arguments[4];
             }
         }

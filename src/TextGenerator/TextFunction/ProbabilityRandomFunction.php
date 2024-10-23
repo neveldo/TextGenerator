@@ -2,6 +2,7 @@
 
 namespace Neveldo\TextGenerator\TextFunction;
 
+use InvalidArgumentException;
 use Neveldo\TextGenerator\Tag\TagReplacer;
 use Neveldo\TextGenerator\Tag\TagReplacerInterface;
 
@@ -16,40 +17,27 @@ use Neveldo\TextGenerator\Tag\TagReplacerInterface;
  */
 class ProbabilityRandomFunction implements FunctionInterface
 {
-    /**
-     * @var TagReplacerInterface Tag Replacer service
-     */
-    private $tagReplacer;
-
-    /**
-     * ProbabilityRandomFunction constructor.
-     * @param TagReplacerInterface $tagReplacer
-     */
-    public function __construct(TagReplacerInterface $tagReplacer)
+    public function __construct(private readonly TagReplacerInterface $tagReplacer)
     {
-        $this->tagReplacer = $tagReplacer;
     }
 
     /**
      * Handle prandom function
-     * @param array $arguments list of arguments where tags have been replaced by their values
-     * @param array $originalArguments list of original arguments
-     * @return string
+     * @param array<int,string> $arguments list of arguments where tags have been replaced by their values
+     * @param array<int,string> $originalArguments list of original arguments
      */
-    public function execute(array $arguments, array $originalArguments)
+    public function execute(array $arguments, array $originalArguments): string
     {
         if (count($arguments) < 1) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf("ProbabilityRandomFunction expect at least one parameter, %d given.", count($arguments))
             );
         }
 
         // Remove arguments that contain empty tags
-        $arguments = array_filter($arguments, function($item) {
-            return  (mb_strpos($item, $this->tagReplacer->getEmptyTag()) === false);
-        });
+        $arguments = array_filter($arguments, fn ($item): bool => mb_strpos((string) $item, $this->tagReplacer->getEmptyTag()) === false);
 
-        if (count($arguments) === 0) {
+        if ($arguments === []) {
             return TagReplacer::EMPTY_TAG;
         }
 
@@ -57,21 +45,21 @@ class ProbabilityRandomFunction implements FunctionInterface
         $probabilities = [];
         $optionId = 0;
 
-        foreach($arguments as $argument) {
+        foreach ($arguments as $argument) {
 
-            if (mb_strpos($argument, ':') === false) {
+            if (mb_strpos((string) $argument, ':') === false) {
                 continue;
             }
 
-            $probability = (int) mb_substr($argument, 0, mb_strpos($argument, ':'));
+            $probability = (int) mb_substr((string) $argument, 0, mb_strpos((string) $argument, ':'));
 
             if ($probability <= 0) {
                 continue;
             }
 
             $value = '';
-            if (mb_strpos($argument, ':') + 1 < mb_strlen($argument)) {
-                $value = mb_substr($argument, mb_strpos($argument, ':') + 1);
+            if (mb_strpos((string) $argument, ':') + 1 < mb_strlen((string) $argument)) {
+                $value = mb_substr((string) $argument, mb_strpos((string) $argument, ':') + 1);
             }
 
             $options[$optionId] = [
@@ -83,7 +71,7 @@ class ProbabilityRandomFunction implements FunctionInterface
             ++$optionId;
         }
 
-        if (count($options) === 0) {
+        if ($options === []) {
             return TagReplacer::EMPTY_TAG;
         }
 
