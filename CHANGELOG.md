@@ -1,6 +1,10 @@
 # ChangeLog
 Change log for TextGenerator
 
+## 2.0.0 - Oct 23, 2024
+- update PHP version, update dependencies, improve code quality
+- Add a reproducable random function "reprandom"
+
 ## 1.7.0 - June 3, 2020
 - Remove recursive regex and recursive sort in template compilation step
 - Add test testImbricatedFunctions()
